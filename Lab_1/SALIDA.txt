@@ -1,0 +1,58 @@
+=== Script 1: Firmas ECDSA Brutas con Viem ===
+
+✓ Par de claves secp256k1 generado
+
+📝 Mensaje: "Hello UFM"
+📄 Firma (hexadecimal):
+3045022100b0202a4d0f3b9dead861496356df07fea14c744887daa3ab361da31edc2f25ca022008f0044ed22f9641c65b07cf0517f40a1fe36389357664f96093daa4eeac424a
+
+✓ Firma válida verificada: true
+
+🔴 Firma corrupta verificada: false
+❌ Firma inválida
+
+✓ Wallet Ethereum generado
+📍 Dirección Ethereum: 0x6c5365dF0DeC2b7447301A49c522df67e9b639fc
+
+🔐 Clave privada (GUARDAR PARA SCRIPT 2):
+0x4e297593d63542be97e2ae32b55516037f1a5f4af1cde67d2a2c2ed667937c7a
+
+=== Script 1 Completado ===
+=== Script 2: ERC-712 Datos Tipificados con Viem ===
+
+✓ Wallet Viem recuperado
+📍 Dirección: 0xF157cd3b1f12F4c046a7Cac627F8C0929E1479AD
+
+📋 Dominio EIP-712:
+   Nombre: UFM Course
+   Versión: 1
+   Chain ID: 31337
+
+📝 Tipo Enrollment:
+   - student (address)
+   - course (string)
+
+✉️  Mensaje de Inscripción:
+   student: 0xF157cd3b1f12F4c046a7Cac627F8C0929E1479AD
+   course: SE-4XX
+
+🔐 Hash EIP-712 (para firmado):
+0x2f12f9bf5a1f9dbb9d3b22c74d2e6eccd936ff1aa6ca35fc2b0a73db5fc69503
+
+✍️  Firma ERC-712:
+0x8ecc5ea67adce02897e99ccbc3d2c3a5700d708d7575eac2cd33799f684a66924f45021c4207b2560fca11304b7586f18ee74d0c5ff86030ae3af5432fb621cb1b
+
+🔧 Componentes de la firma (para ecrecover):
+   r: 0x8ecc5ea67adce02897e99ccbc3d2c3a5700d708d7575eac2cd33799f684a6692
+   s: 0x4f45021c4207b2560fca11304b7586f18ee74d0c5ff86030ae3af5432fb621cb
+   v: 27
+
+📌 SALIDA IMPORTANTE:
+   - Dirección del estudiante: 0xF157cd3b1f12F4c046a7Cac627F8C0929E1479AD
+   - Hash EIP-712: 0x2f12f9bf5a1f9dbb9d3b22c74d2e6eccd936ff1aa6ca35fc2b0a73db5fc69503
+   - Firma completa: 0x8ecc5ea67adce02897e99ccbc3d2c3a5700d708d7575eac2cd33799f684a66924f45021c4207b2560fca11304b7586f18ee74d0c5ff86030ae3af5432fb621cb1b
+   - Componente r: 0x8ecc5ea67adce02897e99ccbc3d2c3a5700d708d7575eac2cd33799f684a6692
+   - Componente s: 0x4f45021c4207b2560fca11304b7586f18ee74d0c5ff86030ae3af5432fb621cb
+   - Componente v: 27
+
+=== Script 2 Completado ===
