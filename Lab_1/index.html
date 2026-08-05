@@ -1,69 +1,334 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab 01 - Technologies and Freedom</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body{
-            font-family: Arial, sans-serif;
-            background:#f5f5f5;
-            margin:40px;
-        }
+<title>Lab 01 - Firmas Criptográficas</title>
 
-        .card{
-            max-width:700px;
-            margin:auto;
-            background:white;
-            padding:30px;
-            border-radius:12px;
-            box-shadow:0 5px 15px rgba(0,0,0,.15);
-        }
+<style>
 
-        h1{
-            color:#1f2937;
-        }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
 
-        h2{
-            color:#374151;
-        }
+body{
+background:#f3f5f9;
+color:#222;
+line-height:1.6;
+}
 
-        a{
-            text-decoration:none;
-            color:#2563eb;
-            font-weight:bold;
-        }
+header{
 
-        li{
-            margin:10px 0;
-        }
-    </style>
+background:linear-gradient(135deg,#1f2937,#111827);
+color:white;
+padding:60px 20px;
+text-align:center;
+
+}
+
+header h1{
+
+font-size:42px;
+margin-bottom:15px;
+
+}
+
+header p{
+
+font-size:18px;
+opacity:.9;
+
+}
+
+.container{
+
+width:90%;
+max-width:1100px;
+margin:auto;
+
+}
+
+section{
+
+background:white;
+margin-top:30px;
+padding:30px;
+border-radius:15px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+h2{
+
+color:#1f2937;
+margin-bottom:20px;
+
+}
+
+.cards{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+
+}
+
+.card{
+
+background:#f9fafb;
+padding:20px;
+border-radius:12px;
+border-left:5px solid #2563eb;
+
+}
+
+.card h3{
+
+margin-bottom:10px;
+
+}
+
+.files{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+
+}
+
+.file{
+
+background:#2563eb;
+color:white;
+padding:20px;
+border-radius:12px;
+text-decoration:none;
+text-align:center;
+transition:.3s;
+
+}
+
+.file:hover{
+
+background:#1d4ed8;
+transform:translateY(-5px);
+
+}
+
+footer{
+
+margin-top:40px;
+padding:25px;
+text-align:center;
+color:#777;
+
+}
+
+</style>
 
 </head>
+
 <body>
+
+<header>
+
+<h1>🔐 Lab 01 - Firmas Criptográficas</h1>
+
+<p>Technologies and Freedom</p>
+
+<p><strong>Michelle</strong> • Carné: 20230493</p>
+
+</header>
+
+<div class="container">
+
+<section>
+
+<h2>📖 Acerca del laboratorio</h2>
+
+<p>
+
+En este laboratorio se implementaron dos ejemplos de firmas criptográficas utilizando Node.js y la biblioteca Viem.
+
+El objetivo fue comprender cómo funcionan las firmas digitales utilizadas por Ethereum y cómo el estándar ERC-712 agrega contexto y seguridad al firmar datos estructurados.
+
+</p>
+
+</section>
+
+<section>
+
+<h2>🎯 Objetivos</h2>
+
+<div class="cards">
 
 <div class="card">
 
-<h1>Lab 01 - Firmas Criptográficas</h1>
+<h3>ECDSA</h3>
 
-<p><strong>Curso:</strong> Technologies and Freedom</p>
-<p><strong>Alumno:</strong> Michelle</p>
-<p><strong>Laboratorio:</strong> Node.js & ERC-712 con Viem</p>
+<p>Comprender cómo se generan claves criptográficas, cómo se firma un mensaje y cómo verificar su autenticidad.</p>
 
-<h2>Archivos</h2>
+</div>
+
+<div class="card">
+
+<h3>Integridad</h3>
+
+<p>Demostrar que una firma alterada deja de ser válida inmediatamente.</p>
+
+</div>
+
+<div class="card">
+
+<h3>ERC-712</h3>
+
+<p>Firmar datos estructurados utilizando dominios, tipos y mensajes siguiendo el estándar Ethereum.</p>
+
+</div>
+
+<div class="card">
+
+<h3>Seguridad</h3>
+
+<p>Comprender el uso de los componentes r, s y v para la verificación mediante ecrecover.</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2>🧪 Scripts desarrollados</h2>
+
+<div class="cards">
+
+<div class="card">
+
+<h3>Script 1 - Firmas ECDSA</h3>
 
 <ul>
 
-<li><a href="sign-raw.js">📄 sign-raw.js</a></li>
+<li>Generación de claves secp256k1</li>
 
-<li><a href="sign-erc712.js">📄 sign-erc712.js</a></li>
+<li>Firma del mensaje "Hello UFM"</li>
 
-<li><a href="SALIDA.txt">📄 SALIDA.txt</a></li>
+<li>Verificación de firma</li>
 
-<li><a href="LIBERTAD_Y_FIRMAS.md">📄 LIBERTAD_Y_FIRMAS.md</a></li>
+<li>Firma corrupta</li>
+
+<li>Generación de wallet Ethereum</li>
 
 </ul>
+
+</div>
+
+<div class="card">
+
+<h3>Script 2 - ERC-712</h3>
+
+<ul>
+
+<li>Recuperación de wallet</li>
+
+<li>Dominio EIP-712</li>
+
+<li>Hash del mensaje</li>
+
+<li>Firma tipificada</li>
+
+<li>Extracción de r, s y v</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2>📚 Conceptos aprendidos</h2>
+
+<div class="cards">
+
+<div class="card">
+
+<h3>🔑 Firmas Digitales</h3>
+
+<p>Permiten demostrar matemáticamente la autenticidad de un mensaje sin revelar la clave privada.</p>
+
+</div>
+
+<div class="card">
+
+<h3>📝 ERC-712</h3>
+
+<p>Agrega contexto mediante dominios para evitar ataques de reutilización de firmas entre aplicaciones.</p>
+
+</div>
+
+<div class="card">
+
+<h3>🌐 Ethereum</h3>
+
+<p>Utiliza ECDSA y el algoritmo secp256k1 para proteger transacciones y autenticar usuarios.</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2>📂 Archivos del laboratorio</h2>
+
+<div class="files">
+
+<a class="file" href="sign-raw.js">
+📄 sign-raw.js
+</a>
+
+<a class="file" href="sign-erc712.js">
+📄 sign-erc712.js
+</a>
+
+<a class="file" href="SALIDA.txt">
+📄 SALIDA.txt
+</a>
+
+<a class="file" href="LIBERTAD_Y_FIRMAS.md">
+📄 LIBERTAD_Y_FIRMAS.md
+</a>
+
+</div>
+
+</section>
+
+<section>
+
+<h2>💡 Conclusión</h2>
+
+<p>
+
+Este laboratorio permitió comprender cómo funcionan las firmas criptográficas en Ethereum, desde la firma básica de mensajes hasta el estándar ERC-712 para datos estructurados. También mostró cómo la criptografía reemplaza la confianza en terceros mediante pruebas matemáticas, garantizando autenticidad, integridad y seguridad en aplicaciones blockchain.
+
+</p>
+
+</section>
+
+<footer>
+
+Technologies and Freedom • Universidad Francisco Marroquín • Lab 01 • 2026
+
+</footer>
 
 </div>
 
