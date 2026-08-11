@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Lab 02 | HD Wallets & Seed Phrases</title>
+
+    <style>
+        :root {
+            --bg: #0b1020;
+            --card: rgba(255,255,255,0.06);
+            --card-hover: rgba(255,255,255,0.09);
+            --text: #f8fafc;
+            --muted: #a8b0c2;
+            --accent: #8b5cf6;
+            --accent-2: #06b6d4;
+            --warning: #f59e0b;
+            --border: rgba(255,255,255,0.10);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Inter, Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(139,92,246,0.18), transparent 35%),
+                radial-gradient(circle at top right, rgba(6,182,212,0.14), transparent 30%),
+                var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .container {
+            width: min(1120px, 92%);
+            margin: auto;
+        }
+
+        /* NAV */
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(14px);
+            background: rgba(11,16,32,0.78);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-inner {
+            width: min(1120px, 92%);
+            margin: auto;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 22px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        /* HERO */
+
+        .hero {
+            padding: 95px 0 75px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 7px 12px;
+            border: 1px solid rgba(139,92,246,0.4);
+            border-radius: 999px;
+            color: #c4b5fd;
+            background: rgba(139,92,246,0.10);
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(42px, 7vw, 76px);
+            line-height: 1.02;
+            max-width: 850px;
+            margin-bottom: 22px;
+        }
+
+        .hero h1 .gradient {
+            background: linear-gradient(90deg, #a78bfa, #22d3ee);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            max-width: 760px;
+            font-size: 19px;
+            color: var(--muted);
+        }
+
+        .student {
+            margin-top: 26px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .pill {
+            border: 1px solid var(--border);
+            background: var(--card);
+            padding: 9px 14px;
+            border-radius: 999px;
+            font-size: 14px;
+        }
+
+        /* SECTIONS */
+
+        section {
+            padding: 34px 0;
+        }
+
+        .section-title {
+            font-size: 31px;
+            margin-bottom: 10px;
+        }
+
+        .section-subtitle {
+            color: var(--muted);
+            max-width: 780px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+        }
+
+        /* FLOW */
+
+        .flow {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .flow-item {
+            padding: 22px;
+            border-radius: 18px;
+            background: linear-gradient(
+                145deg,
+                rgba(139,92,246,0.12),
+                rgba(6,182,212,0.06)
+            );
+            border: 1px solid var(--border);
+        }
+
+        .flow-number {
+            font-size: 12px;
+            color: var(--accent-2);
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .flow-item h3 {
+            margin-bottom: 7px;
+        }
+
+        .flow-item p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* SEED */
+
+        .seed-box {
+            margin-top: 20px;
+            padding: 25px;
+            border-radius: 16px;
+            background: #070b16;
+            border: 1px solid rgba(139,92,246,0.35);
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 15px;
+            line-height: 2;
+        }
+
+        .seed-word {
+            display: inline-block;
+            padding: 5px 9px;
+            margin: 4px;
+            background: rgba(139,92,246,0.12);
+            border: 1px solid rgba(139,92,246,0.20);
+            border-radius: 8px;
+        }
+
+        .seed-number {
+            color: #8b5cf6;
+            margin-right: 5px;
+        }
+
+        .warning {
+            margin-top: 18px;
+            padding: 16px 18px;
+            border-left: 4px solid var(--warning);
+            background: rgba(245,158,11,0.08);
+            border-radius: 10px;
+            color: #fde68a;
+        }
+
+        /* TABLE */
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 760px;
+        }
+
+        th,
+        td {
+            padding: 16px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: rgba(255,255,255,0.05);
+            font-size: 14px;
+        }
+
+        td {
+            color: var(--muted);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        code {
+            font-family: "SFMono-Regular", Consolas, monospace;
+            color: #c4b5fd;
+        }
+
+        .address {
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 13px;
+            color: #67e8f9;
+        }
+
+        /* LEARNING */
+
+        .learning-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .learning-card {
+            padding: 24px;
+            border-radius: 18px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            transition: 0.25s;
+        }
+
+        .learning-card:hover {
+            transform: translateY(-4px);
+            background: var(--card-hover);
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 12px;
+            color: #c4b5fd;
+            background: rgba(139,92,246,0.12);
+            border-radius: 999px;
+            padding: 5px 9px;
+            margin-bottom: 12px;
+        }
+
+        .learning-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .learning-card p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* REFLECTION */
+
+        .reflection {
+            border-left: 4px solid var(--accent-2);
+        }
+
+        .reflection p {
+            color: #d6deea;
+            margin-bottom: 16px;
+        }
+
+        footer {
+            margin-top: 55px;
+            padding: 35px 0 50px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            text-align: center;
+            font-size: 14px;
+        }
+
+        @media (max-width: 850px) {
+            .flow,
+            .learning-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 580px) {
+            .flow,
+            .learning-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <div class="logo">
+            Tech & <span>Freedom</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="#seed">Seed</a>
+            <a href="#wallets">Wallets</a>
+            <a href="#learned">Lo aprendido</a>
+            <a href="#reflection">Reflexión</a>
+        </div>
+    </div>
+</nav>
+
+<main>
+
+    <!-- HERO -->
+
+    <header class="hero">
+        <div class="container">
+
+            <div class="badge">
+                LAB 02 · HD WALLETS & SEED PHRASES
+            </div>
+
+            <h1>
+                Una semilla.
+                <span class="gradient">Múltiples direcciones.</span>
+            </h1>
+
+            <p>
+                Exploración de frases semilla, wallets jerárquicamente
+                determinísticas y rutas de derivación para comprender cómo
+                una única semilla puede generar múltiples cuentas.
+            </p>
+
+            <div class="student">
+                <div class="pill">Michelle</div>
+                <div class="pill">Carné: 20230493</div>
+                <div class="pill">Technologies and Freedom</div>
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- IDEA CENTRAL -->
+
+    <section>
+        <div class="container">
+
+            <h2 class="section-title">🧩 Idea central</h2>
+
+            <p class="section-subtitle">
+                El laboratorio demuestra la relación entre una frase semilla,
+                una wallet determinística y las diferentes direcciones que
+                pueden derivarse de ella mediante rutas específicas.
+            </p>
+
+            <div class="flow">
+
+                <div class="flow-item">
+                    <div class="flow-number">01</div>
+                    <h3>Seed Phrase</h3>
+                    <p>
+                        La frase de palabras representa el punto de partida
+                        para recuperar la wallet.
+                    </p>
+                </div>
+
+                <div class="flow-item">
+                    <div class="flow-number">02</div>
+                    <h3>HD Wallet</h3>
+                    <p>
+                        Una sola semilla permite derivar múltiples claves
+                        de manera determinística.
+                    </p>
+                </div>
+
+                <div class="flow-item">
+                    <div class="flow-number">03</div>
+                    <h3>Derivation Path</h3>
+                    <p>
+                        La ruta determina qué cuenta o dirección se deriva
+                        dentro de la jerarquía.
+                    </p>
+                </div>
+
+                <div class="flow-item">
+                    <div class="flow-number">04</div>
+                    <h3>Address</h3>
+                    <p>
+                        Cada ruta genera una dirección diferente, aunque
+                        todas provienen de la misma semilla.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- SEED -->
+
+    <section id="seed">
+        <div class="container">
+
+            <h2 class="section-title">🌱 Seed Phrase</h2>
+
+            <p class="section-subtitle">
+                Frase semilla utilizada para este ejercicio académico.
+                Esta wallet no debe utilizarse para almacenar fondos reales.
+            </p>
+
+            <div class="card">
+
+                <div class="seed-box">
+
+                    <span class="seed-word">
+                        <span class="seed-number">1.</span> hip
+                    </span>
+
+                    <span class="seed-word">
+                        <span class="seed-number">2.</span> wasp
+                    </span>
+
+                    <span class="seed-word">
+                        <span class="seed-number">3.</span> shrimp
+                    </span>
+
+                    <span class="seed-word">
+                        <span class="seed-number">4.</span> top
+                    </span>
+
+                    <span class="seed-word">
+                        <span class="seed-number">5.</span> beef
+                    </span>
+
+                    <span class="seed-word">
+                        <span class="seed-number">6.</span> math
+                    </span>
+
+                    <span class="seed-word">
+                        <span class="seed-number">7.</span> sing
+                    </span>
+
+                    <span class="seed-word">
+                        <span class="seed-number">8.</span> lonely
+                    </span>
+
+                    <span class="seed-word">
+                        <span class="seed-number">9.</span> enable
+                    </span>
+
+                    <span class="seed-word">
+                        <span class="seed-number">10.</span> flush
+                    </span>
+
+                    <span class="seed-word">
+                        <span class="seed-number">11.</span> attack
+                    </span>
+
+                    <span class="seed-word">
+                        <span class="seed-number">12.</span> remember
+                    </span>
+
+                </div>
+
+                <div class="warning">
+                    <strong>⚠ Seguridad:</strong>
+                    esta frase semilla se utiliza exclusivamente para fines
+                    académicos. Al estar publicada, cualquier persona puede
+                    considerarla comprometida. No debe recibir fondos reales.
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- DIRECCIONES -->
+
+    <section id="wallets">
+        <div class="container">
+
+            <h2 class="section-title">🔗 Direcciones derivadas</h2>
+
+            <p class="section-subtitle">
+                Las siguientes direcciones deben derivarse de la misma seed
+                phrase. Lo que cambia entre cada cuenta es su derivation path.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Cuenta</th>
+                            <th>Derivation Path</th>
+                            <th>Dirección Ethereum</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <!-- REEMPLAZAR 0x... CON LAS DIRECCIONES REALES -->
+
+                        <tr>
+                            <td>0</td>
+                            <td><code>m/44'/60'/0'/0/0</code></td>
+                            <td class="address">0x...</td>
+                        </tr>
+
+                        <tr>
+                            <td>1</td>
+                            <td><code>m/44'/60'/0'/0/1</code></td>
+                            <td class="address">0x...</td>
+                        </tr>
+
+                        <tr>
+                            <td>2</td>
+                            <td><code>m/44'/60'/0'/0/2</code></td>
+                            <td class="address">0x...</td>
+                        </tr>
+
+                        <tr>
+                            <td>3</td>
+                            <td><code>m/44'/60'/0'/0/3</code></td>
+                            <td class="address">0x...</td>
+                        </tr>
+
+                        <tr>
+                            <td>4</td>
+                            <td><code>m/44'/60'/0'/0/4</code></td>
+                            <td class="address">0x...</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- LO APRENDIDO -->
+
+    <section id="learned">
+        <div class="container">
+
+            <h2 class="section-title">📚 Lo aprendido en la sesión</h2>
+
+            <p class="section-subtitle">
+                La relación entre BIP-39, BIP-32 y BIP-44 permite entender
+                cómo las wallets modernas administran múltiples cuentas a
+                partir de una única semilla.
+            </p>
+
+            <div class="learning-grid">
+
+                <div class="learning-card">
+
+                    <div class="tag">BIP-39</div>
+
+                    <h3>Mnemonic / Seed Phrase</h3>
+
+                    <p>
+                        BIP-39 utiliza palabras como una representación más
+                        manejable para respaldar y recuperar una wallet. La
+                        frase permite reconstruir la información necesaria
+                        para obtener nuevamente las claves.
+                    </p>
+
+                </div>
+
+
+                <div class="learning-card">
+
+                    <div class="tag">BIP-32</div>
+
+                    <h3>Hierarchical Deterministic Wallets</h3>
+
+                    <p>
+                        BIP-32 permite generar una jerarquía completa de claves
+                        a partir de una única semilla. Por eso no es necesario
+                        crear y respaldar una seed diferente para cada cuenta.
+                    </p>
+
+                </div>
+
+
+                <div class="learning-card">
+
+                    <div class="tag">BIP-44</div>
+
+                    <h3>Derivation Paths</h3>
+
+                    <p>
+                        BIP-44 propone una estructura estándar para organizar
+                        las rutas de derivación. Al modificar partes de la ruta
+                        se pueden obtener distintas cuentas y direcciones.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- RELACION -->
+
+    <section>
+        <div class="container">
+
+            <div class="card">
+
+                <h2 class="section-title">
+                    🔍 ¿Cómo se relacionan estos conceptos?
+                </h2>
+
+                <div class="flow">
+
+                    <div class="flow-item">
+                        <div class="flow-number">BIP-39</div>
+                        <h3>Seed Phrase</h3>
+                        <p>
+                            Proporciona una forma práctica de respaldar
+                            la información raíz de la wallet.
+                        </p>
+                    </div>
+
+                    <div class="flow-item">
+                        <div class="flow-number">BIP-32</div>
+                        <h3>HD Wallet</h3>
+                        <p>
+                            Utiliza la semilla para crear una jerarquía
+                            determinística de claves.
+                        </p>
+                    </div>
+
+                    <div class="flow-item">
+                        <div class="flow-number">BIP-44</div>
+                        <h3>Paths</h3>
+                        <p>
+                            Organiza esa jerarquía mediante rutas
+                            estandarizadas.
+                        </p>
+                    </div>
+
+                    <div class="flow-item">
+                        <div class="flow-number">RESULTADO</div>
+                        <h3>Addresses</h3>
+                        <p>
+                            Se obtienen múltiples direcciones distintas
+                            desde una misma raíz.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- REFLEXION -->
+
+    <section id="reflection">
+        <div class="container">
+
+            <h2 class="section-title">💭 Reflexión</h2>
+
+            <div class="card reflection">
+
+                <p>
+                    Este laboratorio me permitió entender que una wallet no
+                    necesariamente corresponde a una sola dirección. Una misma
+                    seed phrase puede funcionar como la raíz desde la cual se
+                    generan múltiples claves y direcciones de manera
+                    determinística.
+                </p>
+
+                <p>
+                    También comprendí mejor la diferencia entre la seed phrase,
+                    la wallet HD y las rutas de derivación. La frase permite
+                    recuperar la raíz de la wallet, BIP-32 permite construir
+                    una jerarquía de claves y BIP-44 proporciona una forma
+                    estándar de organizar las diferentes cuentas dentro de
+                    esa jerarquía.
+                </p>
+
+                <p>
+                    Esto simplifica considerablemente el respaldo de una wallet,
+                    porque no es necesario almacenar una clave independiente
+                    para cada dirección. Al mismo tiempo, aumenta la importancia
+                    de proteger correctamente la seed phrase, ya que quien tenga
+                    acceso a ella puede reconstruir las cuentas derivadas.
+                </p>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- CONCLUSION -->
+
+    <section>
+        <div class="container">
+
+            <div class="card">
+
+                <h2 class="section-title">✅ Conclusión</h2>
+
+                <p class="section-subtitle" style="margin-bottom:0;">
+                    Una única seed phrase puede actuar como la raíz de una
+                    estructura completa de cuentas. Los estándares BIP-39,
+                    BIP-32 y BIP-44 permiten respaldar, derivar y organizar
+                    esas cuentas de una manera determinística y reproducible.
+                </p>
+
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+
+<footer>
+    Technologies and Freedom · Universidad Francisco Marroquín
+    <br>
+    Lab 02 · HD Wallets & Seed Phrases · 2026
+</footer>
+
+</body>
+</html>
