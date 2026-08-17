@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-08-17T05:12:35.823Z",
+  "network": "testnet",
+  "sender": {
+    "address": "tb1qdma96vnsydl6jxxgkavrztfcc6v8pscz3s46z8",
+    "balanceFinal": "51283",
+    "utxos": [
+      {
+        "txid": "24b7b3b394d03193851426f3d1beb0235d41c7bbe3b1f85f0c338a8fb6e5a668",
+        "vout": 1,
+        "status": {
+          "confirmed": true,
+          "block_height": 5124201,
+          "block_hash": "00000000000050925647d820385f032c425f1f61f5b480535fc91532fb50b2f7",
+          "block_time": 1786948688
+        },
+        "value": 51283
+      }
+    ]
+  },
+  "receiver": {
+    "address": "tb1qszqfqlukke087w7katg9ykdtazhxwlwmqse7cs",
+    "balanceFinal": "50000",
+    "utxos": [
+      {
+        "txid": "24b7b3b394d03193851426f3d1beb0235d41c7bbe3b1f85f0c338a8fb6e5a668",
+        "vout": 0,
+        "status": {
+          "confirmed": true,
+          "block_height": 5124201,
+          "block_hash": "00000000000050925647d820385f032c425f1f61f5b480535fc91532fb50b2f7",
+          "block_time": 1786948688
+        },
+        "value": 50000
+      }
+    ]
+  },
+  "transaction": {
+    "txid": "24b7b3b394d03193851426f3d1beb0235d41c7bbe3b1f85f0c338a8fb6e5a668",
+    "explorer": "https://blockstream.info/testnet/tx/24b7b3b394d03193851426f3d1beb0235d41c7bbe3b1f85f0c338a8fb6e5a668"
+  }
+}

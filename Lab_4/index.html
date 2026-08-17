@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lab 04 — Transacciones de Bitcoin con WDK</title>
+  <style>
+    :root{
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --line:#dbe2ea;
+      --accent:#2563eb;
+      --accent-soft:#eff6ff;
+      --success:#047857;
+      --success-soft:#ecfdf5;
+      --warning:#b45309;
+      --warning-soft:#fffbeb;
+      --dark:#111827;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+      max-width:1080px;
+      margin:0 auto;
+      padding:32px 20px 60px;
+      line-height:1.65;
+      color:var(--text);
+      background:var(--bg);
+    }
+    h1,h2,h3{color:var(--dark);line-height:1.25;margin-top:0}
+    h1{font-size:2.2rem;margin-bottom:10px}
+    h2{font-size:1.35rem;margin-bottom:14px}
+    h3{font-size:1.05rem;margin-bottom:8px}
+    p{margin:8px 0 12px}
+    .hero{
+      background:linear-gradient(135deg,#111827,#1f2937);
+      color:#fff;
+      border-radius:18px;
+      padding:28px;
+      margin-bottom:22px;
+    }
+    .hero h1{color:#fff;margin-bottom:8px}
+    .hero p{color:#d1d5db;margin-bottom:16px}
+    .tags{display:flex;flex-wrap:wrap;gap:8px}
+    .tag{
+      display:inline-block;
+      padding:5px 10px;
+      border-radius:999px;
+      background:#374151;
+      color:#e5e7eb;
+      font-size:.88rem;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:22px;
+      margin:18px 0;
+      box-shadow:0 3px 12px rgba(15,23,42,.04);
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
+      margin:14px 0;
+    }
+    .metric{
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:15px;
+      background:#fbfdff;
+    }
+    .metric .label{font-size:.85rem;color:var(--muted);margin-bottom:4px}
+    .metric .value{font-size:1.25rem;font-weight:700;color:var(--dark);word-break:break-word}
+    .status-ok{
+      padding:13px 15px;
+      border-radius:10px;
+      background:var(--success-soft);
+      color:var(--success);
+      border:1px solid #a7f3d0;
+      font-weight:600;
+    }
+    .note{
+      padding:13px 15px;
+      border-radius:10px;
+      background:var(--warning-soft);
+      color:var(--warning);
+      border:1px solid #fde68a;
+    }
+    code,pre{
+      background:#f3f4f6;
+      border-radius:7px;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    }
+    code{padding:2px 6px}
+    pre{padding:15px;overflow:auto;border:1px solid var(--line)}
+    table{border-collapse:collapse;width:100%;margin:10px 0}
+    th,td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}
+    th{background:#f8fafc}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .small{font-size:.9rem;color:var(--muted)}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;word-break:break-all}
+    ol,ul{padding-left:24px}
+    .footer{color:var(--muted);font-size:.9rem;text-align:center;margin-top:28px}
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <h1>Lab 04 — Transacciones de Bitcoin con WDK</h1>
+    <p>Automatización de una transacción de Bitcoin usando WDK, UTXOs, Electrum y Bitcoin Testnet.</p>
+    <div class="tags">
+      <span class="tag">Bitcoin</span>
+      <span class="tag">WDK</span>
+      <span class="tag">BIP-39</span>
+      <span class="tag">BIP-84</span>
+      <span class="tag">UTXO</span>
+      <span class="tag">Electrum</span>
+      <span class="tag">Testnet</span>
+    </div>
+  </header>
+
+  <section class="card">
+    <h2>1. Objetivo del laboratorio</h2>
+    <p>
+      Automatizar el flujo de una transacción de Bitcoin con WDK: generar una nueva billetera,
+      obtener UTXOs desde un faucet de Testnet, enviar un monto a una segunda billetera y registrar
+      los balances y UTXOs antes y después del envío.
+    </p>
+    <p>
+      En este laboratorio se utilizó <strong>Bitcoin Testnet</strong> para obtener fondos de prueba.
+      Se dejó preparada además la configuración para <strong>Regtest</strong>, pero las monedas de Testnet
+      no pueden utilizarse en Regtest porque son redes independientes.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>2. Herramientas y configuración</h2>
+    <table>
+      <tr><th>Elemento</th><th>Configuración utilizada</th></tr>
+      <tr><td>Runtime</td><td>Node.js 24.18.1</td></tr>
+      <tr><td>Gestor de paquetes</td><td>npm 11.16.0</td></tr>
+      <tr><td>SDK</td><td><code>@tetherto/wdk-wallet-btc</code> 1.0.0-beta.11</td></tr>
+      <tr><td>Red ejecutada</td><td>Bitcoin Testnet</td></tr>
+      <tr><td>Cliente blockchain</td><td>Electrum</td></tr>
+      <tr><td>Electrum</td><td><code>electrum.blockstream.info:60002</code> mediante TLS</td></tr>
+      <tr><td>Derivación</td><td>BIP-39 + Native SegWit (BIP-84)</td></tr>
+    </table>
+    <p class="small">
+      El proyecto conserva las semillas localmente en archivos ocultos y estos archivos deben permanecer fuera de GitHub.
+      El archivo <code>.gitignore</code> excluye <code>.env</code>, las mnemonics y los reportes locales sensibles.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>3. Flujo automatizado realizado</h2>
+    <ol>
+      <li>Se generó una billetera emisora (Wallet A) y una receptora (Wallet B) mediante WDK.</li>
+      <li>Se guardaron las mnemonics localmente para reutilizar las mismas billeteras en ejecuciones posteriores.</li>
+      <li>Se obtuvo BTC de prueba desde un faucet de Bitcoin Testnet.</li>
+      <li>Se consultó el balance y los movimientos de Wallet A antes de gastar los fondos.</li>
+      <li>Se cotizó la comisión y se envió <strong>50,000 sats</strong> a Wallet B.</li>
+      <li>Se obtuvo el TXID y se verificó la transacción en Blockstream Testnet.</li>
+      <li>Después de la confirmación, se consultaron los UTXOs y balances finales de ambas billeteras.</li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2>4. Evidencia del faucet</h2>
+    <div class="grid">
+      <div class="metric">
+        <div class="label">Monto recibido</div>
+        <div class="value">0.00138507 tBTC</div>
+      </div>
+      <div class="metric">
+        <div class="label">Monto en satoshis</div>
+        <div class="value">138,507 sats</div>
+      </div>
+      <div class="metric">
+        <div class="label">Bloque del faucet</div>
+        <div class="value">5,124,199</div>
+      </div>
+    </div>
+    <p><strong>Wallet A:</strong></p>
+    <p class="mono">tb1qdma96vnsydl6jxxgkavrztfcc6v8pscz3s46z8</p>
+    <p><strong>TXID del faucet:</strong></p>
+    <p class="mono">182250dcb92d236125f43235ba8f51825774aa926d6ce444fe5a628acb08b278</p>
+  </section>
+
+  <section class="card">
+    <h2>5. Estado antes de la transacción</h2>
+    <div class="grid">
+      <div class="metric">
+        <div class="label">Balance de Wallet A</div>
+        <div class="value">138,507 sats</div>
+      </div>
+      <div class="metric">
+        <div class="label">Transferencias detectadas</div>
+        <div class="value">1</div>
+      </div>
+      <div class="metric">
+        <div class="label">UTXO disponible</div>
+        <div class="value">138,507 sats</div>
+      </div>
+    </div>
+    <table>
+      <tr><th>Campo</th><th>Valor</th></tr>
+      <tr><td>TXID del UTXO</td><td class="mono">182250dcb92d236125f43235ba8f51825774aa926d6ce444fe5a628acb08b278</td></tr>
+      <tr><td>vout</td><td>0</td></tr>
+      <tr><td>Valor</td><td>138,507 sats</td></tr>
+      <tr><td>Dirección</td><td class="mono">tb1qdma96vnsydl6jxxgkavrztfcc6v8pscz3s46z8</td></tr>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>6. Transacción realizada</h2>
+    <div class="grid">
+      <div class="metric">
+        <div class="label">Monto enviado</div>
+        <div class="value">50,000 sats</div>
+      </div>
+      <div class="metric">
+        <div class="label">Comisión</div>
+        <div class="value">37,224 sats</div>
+      </div>
+      <div class="metric">
+        <div class="label">Tasa efectiva</div>
+        <div class="value">265.41 sat/vB</div>
+      </div>
+      <div class="metric">
+        <div class="label">Virtual size</div>
+        <div class="value">141 vB</div>
+      </div>
+    </div>
+    <p><strong>Wallet B:</strong></p>
+    <p class="mono">tb1qszqfqlukke087w7katg9ykdtazhxwlwmqse7cs</p>
+    <p><strong>TXID de la transacción:</strong></p>
+    <p class="mono">24b7b3b394d03193851426f3d1beb0235d41c7bbe3b1f85f0c338a8fb6e5a668</p>
+    <p>
+      <a href="https://blockstream.info/testnet/tx/24b7b3b394d03193851426f3d1beb0235d41c7bbe3b1f85f0c338a8fb6e5a668" target="_blank" rel="noopener">
+        Ver transacción en Blockstream Testnet
+      </a>
+    </p>
+    <div class="status-ok">Transacción confirmada: 2 confirmaciones, bloque 5,124,201.</div>
+  </section>
+
+  <section class="card">
+    <h2>7. UTXOs y balances finales</h2>
+    <table>
+      <tr>
+        <th>Billetera</th>
+        <th>UTXO</th>
+        <th>vout</th>
+        <th>Valor</th>
+        <th>Confirmado</th>
+        <th>Bloque</th>
+      </tr>
+      <tr>
+        <td>Wallet A / Sender</td>
+        <td class="mono">24b7b3b394d03193851426f3d1beb0235d41c7bbe3b1f85f0c338a8fb6e5a668</td>
+        <td>1</td>
+        <td>51,283 sats</td>
+        <td>Sí</td>
+        <td>5,124,201</td>
+      </tr>
+      <tr>
+        <td>Wallet B / Receiver</td>
+        <td class="mono">24b7b3b394d03193851426f3d1beb0235d41c7bbe3b1f85f0c338a8fb6e5a668</td>
+        <td>0</td>
+        <td>50,000 sats</td>
+        <td>Sí</td>
+        <td>5,124,201</td>
+      </tr>
+    </table>
+
+    <div class="grid">
+      <div class="metric">
+        <div class="label">Balance final Wallet A</div>
+        <div class="value">51,283 sats</div>
+      </div>
+      <div class="metric">
+        <div class="label">Balance final Wallet B</div>
+        <div class="value">50,000 sats</div>
+      </div>
+      <div class="metric">
+        <div class="label">Comisión total</div>
+        <div class="value">37,224 sats</div>
+      </div>
+    </div>
+
+    <p>
+      La salida <strong>vout 0</strong> corresponde al pago de 50,000 sats a Wallet B y la salida
+      <strong>vout 1</strong> corresponde al cambio de 51,283 sats que vuelve a Wallet A.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>8. Comprobación matemática</h2>
+    <pre>Balance inicial Wallet A   = 138,507 sats
+Monto enviado              =  50,000 sats
+Comisión                    =  37,224 sats
+----------------------------------------
+Cambio final Wallet A       =  51,283 sats</pre>
+    <p>
+      Por lo tanto, el balance final satisface exactamente:
+      <code>138,507 - 50,000 - 37,224 = 51,283 sats</code>.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>9. Anatomía de la transacción observada</h2>
+    <table>
+      <tr><th>Campo</th><th>Resultado observado</th></tr>
+      <tr><td>Red</td><td>Bitcoin Testnet</td></tr>
+      <tr><td>TXID</td><td class="mono">24b7b3b394d03193851426f3d1beb0235d41c7bbe3b1f85f0c338a8fb6e5a668</td></tr>
+      <tr><td>Confirmaciones</td><td>2</td></tr>
+      <tr><td>Block height</td><td>5,124,201</td></tr>
+      <tr><td>Versión</td><td>2</td></tr>
+      <tr><td>Virtual size</td><td>141 vB</td></tr>
+      <tr><td>Weight</td><td>561 WU</td></tr>
+      <tr><td>Fee</td><td>0.00037224 tBTC = 37,224 sats</td></tr>
+      <tr><td>Fee rate</td><td>265.41 sat/vB</td></tr>
+      <tr><td>Output 0</td><td>50,000 sats → Wallet B</td></tr>
+      <tr><td>Output 1</td><td>51,283 sats → Wallet A (cambio)</td></tr>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>10. UTXO, mempool y comisiones</h2>
+    <table>
+      <tr><th>Concepto</th><th>Lo observado en el laboratorio</th></tr>
+      <tr><td>UTXO</td><td>Una salida no gastada que representa una cantidad concreta de bitcoin disponible para gastar.</td></tr>
+      <tr><td>Entrada y salida</td><td>La transacción consume el UTXO de 138,507 sats y crea dos nuevos outputs: pago y cambio.</td></tr>
+      <tr><td>Fee</td><td>La comisión pagada fue 37,224 sats y estuvo determinada por el tamaño y la tasa de comisión.</td></tr>
+      <tr><td>Mempool</td><td>Antes de la confirmación, la transacción fue una transacción no confirmada; después fue incluida en el bloque 5,124,201.</td></tr>
+      <tr><td>Confirmación</td><td>El explorador mostró 2 confirmaciones, evidenciando que la transacción fue incluida y posteriormente seguida por otro bloque.</td></tr>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>11. Testnet vs. Regtest</h2>
+    <div class="note">
+      El faucet utilizado entrega monedas de Testnet. Regtest es una cadena local independiente; por eso los fondos del faucet no pueden transferirse a Regtest.
+    </div>
+    <table>
+      <tr><th>Red</th><th>Uso en este laboratorio</th></tr>
+      <tr><td>Testnet</td><td>Red utilizada para recibir los fondos del faucet, transmitir la transacción y verificarla en Blockstream.</td></tr>
+      <tr><td>Regtest</td><td>Configurada como alternativa para pruebas locales, pero no utilizada en la ejecución final porque requeriría una instancia local de Bitcoin Core y un servidor Electrum/Fulcrum.</td></tr>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>12. Archivos del proyecto</h2>
+    <pre>Lab_4/
+├── src/
+│   ├── lab04.js      → creación de billeteras, cotización y envío
+│   └── status.js     → consulta de balances, UTXOs y estado final
+├── index.html        → documentación del laboratorio
+├── package.json      → scripts testnet, regtest y status
+├── README.md         → instrucciones del proyecto
+├── lab04-report.json → reporte de la ejecución de la transacción
+└── lab04-status.json → reporte de UTXOs y balances finales</pre>
+    <p>
+      Las credenciales y semillas locales (<code>.env</code>, <code>.sender-mnemonic</code> y
+      <code>.receiver-mnemonic</code>) no deben publicarse en el repositorio.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>13. Comandos utilizados</h2>
+    <pre># Instalar dependencias
+npm install
+
+# Ejecutar el flujo de Testnet
+npm run testnet
+
+# Consultar el estado final sin enviar otra transacción
+npm run status</pre>
+    <p class="small">
+      La transacción final ya fue ejecutada y confirmada. Por seguridad, no es necesario volver a ejecutar
+      <code>npm run testnet</code> para esta entrega.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>14. Conclusión</h2>
+    <p>
+      El laboratorio permitió observar de forma práctica cómo una transacción de Bitcoin consume un UTXO
+      existente y crea nuevas salidas. WDK simplifica la creación de la billetera, la consulta del estado,
+      la cotización de la comisión y el envío, mientras que Electrum permite consultar el estado de la red.
+    </p>
+    <p>
+      En la ejecución realizada, Wallet A recibió 138,507 sats desde el faucet. Posteriormente envió 50,000 sats
+      a Wallet B y pagó una comisión de 37,224 sats. La transacción produjo dos UTXOs confirmados: 50,000 sats
+      para Wallet B y 51,283 sats de cambio para Wallet A. El TXID fue confirmado dos veces en Testnet.
+    </p>
+    <p>
+      El ejercicio también evidencia por qué las comisiones importan para pagos pequeños: en esta operación,
+      la comisión fue una fracción importante del monto transferido. Esto conecta directamente con el estudio
+      de Lightning como una capa orientada a pagos de menor costo fuera de la liquidación base.
+    </p>
+  </section>
+
+
+  <p class="footer">Lab 04 · Bitcoin &amp; Lightning · CS031 · Documentación basada en la ejecución real en Bitcoin Testnet.</p>
+
+</body>
+</html>
