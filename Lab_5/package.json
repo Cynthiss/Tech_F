@@ -4,14 +4,12 @@
   "private": true,
   "type": "module",
   "description": "Lab 05: Bitcoin Lightning wallet with WDK + Spark + Vercel",
-  "scripts": {
- 
-  },
+  "scripts": {},
   "engines": {
     "node": ">=20"
   },
   "dependencies": {
-    "@tetherto/wdk-wallet-spark": "1.0.0-beta.22",
+    "@tetherto/wdk-wallet-spark": "^1.0.0-beta.24",
     "dotenv": "16.6.1"
   },
   "devDependencies": {
