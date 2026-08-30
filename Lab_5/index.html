@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lab 05 · Billetera Lightning con WDK</title>
+
+  <!-- Librería para generar QR -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #171717;
+      background: #f5f5f5;
+    }
+
+    body {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    header,
+    section {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    h1,
+    h2 {
+      margin-top: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 18px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-top: 12px;
+    }
+
+    input,
+    textarea,
+    button {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px 12px;
+      margin-top: 6px;
+      border-radius: 9px;
+      border: 1px solid #bbb;
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: 700;
+      background: #111;
+      color: white;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    button.secondary {
+      background: white;
+      color: #111;
+    }
+
+    textarea {
+      min-height: 105px;
+      resize: vertical;
+    }
+
+    .qr {
+      min-height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed #bbb;
+      border-radius: 12px;
+      margin-top: 12px;
+      background: #fafafa;
+    }
+
+    .status {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 9px;
+      background: #f0f0f0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    code {
+      word-break: break-all;
+    }
+
+    .muted {
+      color: #666;
+    }
+
+    .wallet-box {
+      line-height: 1.7;
+    }
+
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      word-break: break-all;
+    }
+
+    .success {
+      font-weight: 800;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===================================== -->
+  <!-- INFORMACIÓN DE LA WALLET -->
+  <!-- ===================================== -->
+
+  <header>
+    <h1>⚡ Lab 05 — Billetera Lightning con WDK</h1>
+
+    <p>
+      Aplicación para generar facturas Lightning, mostrarlas como QR,
+      comprobar su estado y pagar facturas BOLT11.
+    </p>
+
+    <div id="walletInfo" class="status wallet-box">
+      Cargando información de la wallet...
+    </div>
+
+    <p class="muted">
+      La mnemonic nunca se muestra en el frontend.
+      El backend la obtiene únicamente desde
+      <code>WDK_MNEMONIC</code>.
+    </p>
+  </header>
+
+
+  <!-- ===================================== -->
+  <!-- RECIBIR -->
+  <!-- ===================================== -->
+
+  <section>
+    <h2>Recibir</h2>
+
+    <div class="grid">
+
+      <div>
+
+        <label for="receiveAmount">
+          Cantidad (sats)
+        </label>
+
+        <input
+          id="receiveAmount"
+          type="number"
+          min="1"
+          value="1000"
+        >
+
+        <label for="receiveMemo">
+          Memo
+        </label>
+
+        <input
+          id="receiveMemo"
+          type="text"
+          value="Lab 05 - pago Lightning"
+        >
+
+        <button id="createInvoice">
+          Generar invoice
+        </button>
+
+        <div
+          id="receiveStatus"
+          class="status"
+        >
+          Todavía no has generado una invoice.
+        </div>
+
+      </div>
+
+
+      <div>
+
+        <div id="qr" class="qr">
+          Aquí aparecerá el QR.
+        </div>
+
+        <label for="bolt11">
+          BOLT11
+        </label>
+
+        <textarea
+          id="bolt11"
+          readonly
+          placeholder="Aquí aparecerá la factura..."
+        ></textarea>
+
+        <button
+          id="copyInvoice"
+          class="secondary"
+        >
+          Copiar BOLT11
+        </button>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ===================================== -->
+  <!-- PAGAR -->
+  <!-- ===================================== -->
+
+  <section>
+
+    <h2>Pagar</h2>
+
+    <label for="payInvoice">
+      Pega aquí una factura BOLT11
+    </label>
+
+    <textarea
+      id="payInvoice"
+      placeholder="lnbc..."
+    ></textarea>
+
+    <label for="maxFee">
+      Máximo fee permitido (sats)
+    </label>
+
+    <input
+      id="maxFee"
+      type="number"
+      min="0"
+      value="100"
+    >
+
+    <button id="payButton">
+      Cotizar y pagar
+    </button>
+
+    <div
+      id="payStatus"
+      class="status"
+    >
+      Esperando factura.
+    </div>
+
+  </section>
+
+
+  <script>
+
+    const $ = (id) => document.getElementById(id);
+
+    let currentInvoiceId = null;
+    let pollHandle = null;
+
+
+    // =========================================
+    // HELPER PARA LLAMADAS A LA API
+    // =========================================
+
+    async function api(url, options = {}) {
+
+      const response = await fetch(url, options);
+
+      const data = await response
+        .json()
+        .catch(() => ({}));
+
+      if (!response.ok) {
+
+        throw new Error(
+          data.error || `HTTP ${response.status}`
+        );
+
+      }
+
+      return data;
+    }
+
+
+    // =========================================
+    // CARGAR INFORMACIÓN DE LA WALLET
+    // =========================================
+
+    async function loadWalletInfo() {
+
+      try {
+
+        const data = await api('/api/info');
+
+        $('walletInfo').textContent =
+          `Red: ${data.network}\n` +
+          `Spark address: ${data.address}\n` +
+          `Node ID / identity key: ${data.identityKey}\n` +
+          `Balance disponible: ${data.balanceSats} sats`;
+
+      } catch (error) {
+
+        $('walletInfo').textContent =
+          `Error cargando wallet: ${error.message}`;
+
+      }
+
+    }
+
+
+    // =========================================
+    // GENERAR QR
+    // =========================================
+
+    function renderQr(text) {
+
+      const container = $('qr');
+
+      container.innerHTML = '';
+
+      new QRCode(container, {
+        text: text,
+        width: 280,
+        height: 280,
+        correctLevel: QRCode.CorrectLevel.M
+      });
+
+    }
+
+
+    // =========================================
+    // COMPROBAR ESTADO DE INVOICE
+    // =========================================
+
+    async function checkInvoice() {
+
+      if (!currentInvoiceId) {
+        return;
+      }
+
+      try {
+
+        const data = await api(
+          `/api/check/${encodeURIComponent(currentInvoiceId)}`
+        );
+
+        const status =
+          String(data.status || 'UNKNOWN')
+            .toUpperCase();
+
+        let message =
+          `Invoice ID: ${data.invoiceId}\n` +
+          `Estado: ${status}`;
+
+        /*
+         * WDK Spark puede devolver:
+         * TRANSFER_COMPLETED
+         * SETTLED
+         * COMPLETED
+         * PAID
+         *
+         * Cualquiera de estos indica que el pago
+         * fue completado.
+         */
+        if (
+          status === 'TRANSFER_COMPLETED' ||
+          status === 'SETTLED' ||
+          status === 'COMPLETED' ||
+          status === 'PAID'
+        ) {
+
+          message += '\n\n✅ Pago recibido.';
+
+          if (pollHandle) {
+
+            clearInterval(pollHandle);
+
+            pollHandle = null;
+
+          }
+
+          await loadWalletInfo();
+
+        }
+
+        $('receiveStatus').textContent = message;
+
+      } catch (error) {
+
+        $('receiveStatus').textContent =
+          `Error consultando invoice: ${error.message}`;
+
+      }
+
+    }
+
+
+    // =========================================
+    // CREAR INVOICE
+    // =========================================
+
+    $('createInvoice')
+      .addEventListener('click', async () => {
+
+        const amountSats =
+          Number($('receiveAmount').value);
+
+        const memo =
+          $('receiveMemo')
+            .value
+            .trim();
+
+        if (
+          !Number.isInteger(amountSats) ||
+          amountSats <= 0
+        ) {
+
+          $('receiveStatus').textContent =
+            'La cantidad debe ser un número entero mayor que 0.';
+
+          return;
+        }
+
+        $('createInvoice').disabled = true;
+
+        $('receiveStatus').textContent =
+          'Generando invoice...';
+
+        try {
+
+          const data = await api(
+            '/api/invoice',
+            {
+              method: 'POST',
+
+              headers: {
+                'content-type': 'application/json'
+              },
+
+              body: JSON.stringify({
+                amountSats,
+                memo
+              })
+            }
+          );
+
+          currentInvoiceId =
+            data.invoiceId;
+
+          $('bolt11').value =
+            data.bolt11;
+
+          renderQr(data.bolt11);
+
+          $('receiveStatus').textContent =
+            `Invoice creada.\n` +
+            `ID: ${data.invoiceId}\n` +
+            `Monto: ${data.amountSats} sats\n` +
+            `Estado: ${String(
+              data.status || 'PENDING'
+            ).toUpperCase()}\n` +
+            `Expira: ${data.expiresAt || 'N/D'}\n\n` +
+            `Esperando pago...`;
+
+          if (pollHandle) {
+
+            clearInterval(
+              pollHandle
+            );
+
+          }
+
+          pollHandle =
+            setInterval(
+              checkInvoice,
+              3000
+            );
+
+        } catch (error) {
+
+          $('receiveStatus').textContent =
+            `Error: ${error.message}`;
+
+        } finally {
+
+          $('createInvoice').disabled = false;
+
+        }
+
+      });
+
+
+    // =========================================
+    // COPIAR BOLT11
+    // =========================================
+
+    $('copyInvoice')
+      .addEventListener('click', async () => {
+
+        const text =
+          $('bolt11')
+            .value
+            .trim();
+
+        if (!text) {
+          return;
+        }
+
+        try {
+
+          await navigator.clipboard.writeText(
+            text
+          );
+
+          $('receiveStatus').textContent +=
+            '\n✅ BOLT11 copiado al portapapeles.';
+
+        } catch (error) {
+
+          $('receiveStatus').textContent +=
+            '\nNo se pudo copiar automáticamente.';
+
+        }
+
+      });
+
+
+    // =========================================
+    // PAGAR INVOICE
+    // =========================================
+
+    $('payButton')
+      .addEventListener('click', async () => {
+
+        const bolt11 =
+          $('payInvoice')
+            .value
+            .trim();
+
+        const maxFeeSats =
+          Number(
+            $('maxFee').value
+          );
+
+        if (!bolt11) {
+
+          $('payStatus').textContent =
+            'Pega primero una factura BOLT11.';
+
+          return;
+
+        }
+
+        if (
+          !Number.isInteger(maxFeeSats) ||
+          maxFeeSats < 0
+        ) {
+
+          $('payStatus').textContent =
+            'El fee máximo debe ser un número válido.';
+
+          return;
+
+        }
+
+        $('payButton').disabled = true;
+
+        $('payStatus').textContent =
+          'Cotizando y preparando pago...';
+
+        try {
+
+          const data = await api(
+            '/api/pay',
+            {
+              method: 'POST',
+
+              headers: {
+                'content-type': 'application/json'
+              },
+
+              body: JSON.stringify({
+                bolt11,
+                maxFeeSats
+              })
+            }
+          );
+
+          $('payStatus').textContent =
+            `✅ Pago enviado.\n` +
+            `Fee estimado: ${
+              data.estimatedFeeSats ?? 'N/D'
+            } sats\n\n` +
+            `Referencia:\n${
+              JSON.stringify(
+                data.payment,
+                null,
+                2
+              )
+            }`;
+
+          await loadWalletInfo();
+
+        } catch (error) {
+
+          $('payStatus').textContent =
+            `Error: ${error.message}`;
+
+        } finally {
+
+          $('payButton').disabled = false;
+
+        }
+
+      });
+
+
+    // =========================================
+    // INICIO
+    // =========================================
+
+    loadWalletInfo();
+
+  </script>
+
+</body>
+</html>
