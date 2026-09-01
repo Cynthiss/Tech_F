@@ -1,22 +1,197 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <title>Lab 06 - TX Forensics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 06 - Forense Taproot vs Ethereum</title>
+    <title>Cynthia Santos - 20230493</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:Arial, Helvetica, sans-serif;
+            background:#f5f7fb;
+            color:#222;
+        }
+
+        header{
+            background:#111827;
+            color:white;
+            padding:50px 20px;
+            text-align:center;
+        }
+
+        header h1{
+            font-size:42px;
+            margin-bottom:15px;
+        }
+
+        header p{
+            font-size:18px;
+            color:#d1d5db;
+        }
+
+        .container{
+            max-width:900px;
+            margin:auto;
+            padding:40px 20px;
+        }
+
+        .card{
+            background:white;
+            border-radius:16px;
+            padding:35px;
+            box-shadow:0 8px 30px rgba(0,0,0,.08);
+        }
+
+        h2{
+            margin-bottom:15px;
+            color:#111827;
+        }
+
+        p{
+            line-height:1.7;
+            margin-bottom:20px;
+        }
+
+        ul{
+            margin-left:20px;
+            margin-bottom:25px;
+        }
+
+        li{
+            margin-bottom:10px;
+        }
+
+        .buttons{
+            display:flex;
+            gap:15px;
+            flex-wrap:wrap;
+            margin-top:25px;
+        }
+
+        .btn{
+            text-decoration:none;
+            padding:14px 24px;
+            border-radius:10px;
+            font-weight:bold;
+            transition:.25s;
+        }
+
+        .primary{
+            background:#2563eb;
+            color:white;
+        }
+
+        .primary:hover{
+            background:#1d4ed8;
+        }
+
+        .secondary{
+            background:#e5e7eb;
+            color:#111827;
+        }
+
+        .secondary:hover{
+            background:#d1d5db;
+        }
+
+        footer{
+            text-align:center;
+            padding:40px;
+            color:#777;
+            font-size:14px;
+        }
+
+        .badge{
+            display:inline-block;
+            background:#dbeafe;
+            color:#1e40af;
+            padding:6px 14px;
+            border-radius:20px;
+            margin-bottom:18px;
+            font-size:14px;
+            font-weight:bold;
+        }
+    </style>
+
 </head>
+
 <body>
 
-<h1>Lab 06 - Forense Taproot vs Ethereum</h1>
+<header>
+
+    <div class="badge">
+        Blockchain Forensics
+    </div>
+
+    <h1>Lab 06</h1>
+
+    <p>
+        Forense Taproot vs Ethereum
+    </p>
+
+</header>
+
+
+<div class="container">
+
+<div class="card">
+
+<h2>Descripción</h2>
 
 <p>
-Repositorio del laboratorio.
+Este laboratorio consiste en realizar un análisis forense utilizando
+transacciones reales de Ethereum y Bitcoin para comparar el funcionamiento
+de un HTLC sobre EVM y Taproot.
 </p>
 
-<p>
-<a href="TX_FORENSICS.md">
-📄 Ver / Descargar TX_FORENSICS.md
+<h2>Contenido</h2>
+
+<ul>
+
+<li>Análisis de EtherSwap en Ethereum.</li>
+
+<li>Inspección de calldata, selector y parámetros.</li>
+
+<li>Análisis de transacciones Taproot en Bitcoin.</li>
+
+<li>Clasificación del gasto Key-path.</li>
+
+<li>Comparación entre Ethereum y Taproot.</li>
+
+<li>Conclusión basada en privacidad, auditoría, costo y flexibilidad.</li>
+
+</ul>
+
+<div class="buttons">
+
+<a class="btn primary" href="TX_FORENSICS.md">
+📄 Ver TX_FORENSICS.md
 </a>
-</p>
+
+<a class="btn secondary" href="TX_FORENSICS.md" download>
+⬇ Descargar archivo
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<footer>
+
+Realizado para el curso Tech & Freedom • Lab 06
+
+</footer>
 
 </body>
+
 </html>
