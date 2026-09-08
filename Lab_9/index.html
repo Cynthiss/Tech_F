@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laboratorio 9 - ERC20 Fee Token</title>
+
+  <style>
+    :root {
+      --bg: #eef2ff;
+      --card: #ffffff;
+      --primary: #4f46e5;
+      --secondary: #7c3aed;
+      --dark: #111827;
+      --muted: #6b7280;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --danger: #dc2626;
+      --code: #0f172a;
+      --border: #e5e7eb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #eef2ff, #fdf2f8);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 55px 30px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 2.4rem;
+      letter-spacing: -1px;
+    }
+
+    .hero p {
+      margin: 10px 0 0;
+      font-size: 1.1rem;
+      opacity: 0.95;
+    }
+
+    .student {
+      margin-top: 20px;
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: -35px auto 50px;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 22px;
+      box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+      border: 1px solid var(--border);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #312e81;
+      font-size: 1.5rem;
+      border-left: 5px solid var(--primary);
+      padding-left: 12px;
+    }
+
+    h3 {
+      color: #4338ca;
+      margin-bottom: 8px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .mini-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .mini-card strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .ok {
+      background: #dcfce7;
+      color: var(--success);
+    }
+
+    .pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .error {
+      background: #fee2e2;
+      color: var(--danger);
+    }
+
+    .progress-box {
+      margin-top: 18px;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .progress {
+      height: 14px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress div {
+      width: 95%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    pre {
+      background: var(--code);
+      color: #a7f3d0;
+      padding: 18px;
+      border-radius: 14px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+      border: 1px solid #1e293b;
+    }
+
+    code {
+      font-family: "SFMono-Regular", Consolas, monospace;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .status-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .status-list li {
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      margin-top: 30px;
+      font-size: 0.9rem;
+    }
+
+    .note {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      color: #78350f;
+      padding: 15px;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="hero">
+    <h1>Laboratorio 9 - ERC20 Fee-on-Transfer</h1>
+    <p>Implementación de token ERC20 con comisión del 1% usando Foundry y OpenZeppelin</p>
+    <div class="student">Cynthia Santos · 20230493</div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Resumen del laboratorio</h2>
+      <p>
+        En este laboratorio se creó un token ERC20 utilizando Foundry y OpenZeppelin.
+        El contrato implementa una comisión del <strong>1%</strong> en cada transferencia,
+        enviando dicha comisión a una dirección receptora definida al momento del despliegue.
+      </p>
+
+      <div class="progress-box">
+        <div class="progress-label">
+          <span>Avance técnico del laboratorio</span>
+          <span>95%</span>
+        </div>
+        <div class="progress"><div></div></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Estado de actividades</h2>
+      <div class="grid">
+        <div class="mini-card"><strong>Forge init</strong><span class="badge ok">Completado</span></div>
+        <div class="mini-card"><strong>OpenZeppelin</strong><span class="badge ok">Instalado</span></div>
+        <div class="mini-card"><strong>Token.sol</strong><span class="badge ok">Implementado</span></div>
+        <div class="mini-card"><strong>Unit Test</strong><span class="badge ok">Aprobado</span></div>
+        <div class="mini-card"><strong>Fuzz Test</strong><span class="badge ok">Aprobado</span></div>
+        <div class="mini-card"><strong>Invariant Test</strong><span class="badge ok">Aprobado</span></div>
+        <div class="mini-card"><strong>Gas Report</strong><span class="badge ok">Generado</span></div>
+        <div class="mini-card"><strong>Deploy Anvil</strong><span class="badge ok">Exitoso</span></div>
+        <div class="mini-card"><strong>Deploy Sepolia</strong><span class="badge pending">Preparado</span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Contrato Token.sol</h2>
+      <pre><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.28;
+
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract Token is ERC20 {
+    address public feeReceiver;
+
+    constructor(address _feeReceiver) ERC20("Lab Token", "LAB") {
+        feeReceiver = _feeReceiver;
+        _mint(msg.sender, 1_000_000 * 10 ** decimals());
+    }
+
+    function _update(address from, address to, uint256 value) internal override {
+        if (from == address(0) || to == address(0)) {
+            super._update(from, to, value);
+            return;
+        }
+
+        uint256 fee = value / 100;
+        uint256 amountAfterFee = value - fee;
+
+        super._update(from, feeReceiver, fee);
+        super._update(from, to, amountAfterFee);
+    }
+}</code></pre>
+    </section>
+
+    <section class="card">
+      <h2>Pruebas implementadas</h2>
+      <ul class="status-list">
+        <li><strong>Unit Test:</strong> verifica que una transferencia envíe correctamente el 1% al feeReceiver.</li>
+        <li><strong>Fuzz Test:</strong> prueba múltiples montos aleatorios para validar que el fee siempre sea correcto.</li>
+        <li><strong>Invariant Test:</strong> valida que el totalSupply permanezca constante durante las operaciones.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Resultado de forge test</h2>
+      <pre><code>Ran 2 test suites:
+5 tests passed
+0 failed
+0 skipped
+
+Suite result: ok</code></pre>
+    </section>
+
+    <section class="card">
+      <h2>Gas Report</h2>
+      <pre><code>src/Token.sol:Token Contract
+
+Function Name    Min     Avg     Median    Max     # Calls
+approve          5396    25208   25296     25296   42478
+balanceOf        2828    2828    2828      2828    774
+totalSupply      2477    2477    2477      2477    1
+transfer         6134    41313   62187     79287   472
+transferFrom     18362   18362   18362     18362   210</code></pre>
+    </section>
+
+    <section class="card">
+      <h2>Deploy local en Anvil</h2>
+      <p><span class="badge ok">Deploy realizado correctamente</span></p>
+
+      <pre><code>Deployer: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+Deployed to: 0x5FbDB2315678afecb367f032d93F642f64180aa3
+Transaction hash: 0x7b409d1164d47a803d46872204c1fef054b77a88192b0c6b670529879a957499</code></pre>
+    </section>
+
+    <section class="card">
+      <h2>Deploy a Sepolia Ethereum</h2>
+      <p><span class="badge pending">Configuración completada · despliegue preparado</span></p>
+
+      <p>
+        Se configuró la infraestructura necesaria para realizar el despliegue en Sepolia:
+        wallet de MetaMask, RPC de Alchemy, variables de entorno y comando de despliegue.
+        Durante la ejecución se identificó una limitación externa relacionada con la
+        disponibilidad de Sepolia ETH para cubrir el gas de la transacción.
+      </p>
+
+      <h3>Comando utilizado</h3>
+      <pre><code>forge create src/Token.sol:Token \
+  --rpc-url "$SEPOLIA_RPC_URL" \
+  --private-key "$PRIVATE_KEY" \
+  --broadcast \
+  --constructor-args "$FEE_RECEIVER"</code></pre>
+
+      <h3>Error obtenido</h3>
+      <pre><code>Error: server returned an error response:
+error code -32000: gas required exceeds allowance (0)</code></pre>
+
+      <div class="note">
+        El contrato quedó listo para ser desplegado inmediatamente en Sepolia una vez la
+        wallet disponga de Sepolia ETH para pagar el gas.
+      </div>
+
+      <h3>Intentos de obtener Sepolia ETH</h3>
+      <ul>
+        <li>Alchemy Faucet: requería saldo mínimo en Ethereum Mainnet.</li>
+        <li>Google Cloud Faucet: entregó PYUSD de prueba, no ETH para gas.</li>
+        <li>QuickNode Faucet: requería saldo en Ethereum Mainnet.</li>
+        <li>Chainlink Faucet: requería LINK en Ethereum Mainnet para solicitar ETH.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Conclusión</h2>
+      <p>
+        El laboratorio permitió implementar un token ERC20 con lógica personalizada de
+        transferencia mediante un fee del 1%. Se validó su comportamiento mediante pruebas
+        unitarias, fuzz tests e invariant tests. Además, se generó el reporte de gas y se
+        realizó correctamente el despliegue local en Anvil.
+      </p>
+      <p>
+        El despliegue en Sepolia quedó técnicamente preparado y documentado. La única
+        limitación encontrada fue externa al código: la falta de Sepolia ETH disponible
+        para cubrir el gas debido a restricciones de los faucets públicos.
+      </p>
+    </section>
+
+    <div class="footer">
+      Desarrollado por Cynthia Santos · 20230493
+    </div>
+  </main>
+</body>
+</html>
