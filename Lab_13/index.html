@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laboratorio 13 - Token Due Diligence</title>
+
+  <style>
+    :root {
+      --bg: #eef2ff;
+      --card: #ffffff;
+      --primary: #4f46e5;
+      --secondary: #7c3aed;
+      --dark: #111827;
+      --muted: #6b7280;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --danger: #dc2626;
+      --border: #e5e7eb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #eef2ff, #fdf2f8);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 55px 30px;
+      text-align: center;
+    }
+
+    .hero h1 { margin: 0; font-size: 2.4rem; letter-spacing: -1px; }
+    .hero p { margin: 10px 0 0; font-size: 1.1rem; opacity: 0.95; }
+
+    .student {
+      margin-top: 20px;
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .container { max-width: 1100px; margin: -35px auto 50px; padding: 0 20px; }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 22px;
+      box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+      border: 1px solid var(--border);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #312e81;
+      font-size: 1.5rem;
+      border-left: 5px solid var(--primary);
+      padding-left: 12px;
+    }
+
+    h3 { color: #4338ca; margin-bottom: 8px; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+
+    .mini-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .mini-card strong { display: block; font-size: 1rem; margin-bottom: 6px; }
+    .mini-card .big { font-size: 1.8rem; font-weight: 800; color: #312e81; }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .ok { background: #dcfce7; color: #166534; }
+    .pending { background: #fef3c7; color: #92400e; }
+    .bad { background: #fee2e2; color: #991b1b; }
+
+    .table-wrap { overflow-x: auto; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { background: #f1f5f9; color: #312e81; }
+    td.num, th.num { text-align: center; white-space: nowrap; }
+    tr.total td { font-weight: 800; background: #f8fafc; }
+
+    code {
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      word-break: break-all;
+    }
+
+    a { color: var(--primary); }
+
+    .note {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 0.95rem;
+    }
+
+    .learned {
+      background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+      border: 1px solid #c7d2fe;
+      border-radius: 14px;
+      padding: 20px 24px;
+      font-size: 1.05rem;
+    }
+
+    footer { text-align: center; color: var(--muted); padding-bottom: 40px; font-size: 0.9rem; }
+  </style>
+</head>
+
+<body>
+  <header class="hero">
+    <h1>Laboratorio 13 - Token Due Diligence</h1>
+    <p>Auditoría de un meme coin (PEPE) y de una emisión regulada de Tohkn (MMLTI1)</p>
+    <div class="student">Cynthia Santos · 20230493</div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Resumen del laboratorio</h2>
+      <p>
+        En este laboratorio se <strong>auditó</strong> en lugar de diseñar: se revisaron dos tokens en extremos
+        opuestos. <strong>PEPE</strong> es un meme coin lanzado sin permiso (fair-launch) en Ethereum, y
+        <strong>MMLTI1</strong> es un token de deuda de MultiMoney emitido en Polygon bajo la ley LEAD de
+        El Salvador a través de Tohkn. Se buscó el contrato de cada uno, se revisó qué puede hacer y se
+        comparó con lo que promete su documentación (el DIR).
+      </p>
+      <p class="note">Datos consultados el 5 de octubre de 2026 con RPC públicos de Ethereum y Polygon, Etherscan, Blockscout, CoinGecko, DexScreener y el DIR de MMLTI1.</p>
+    </section>
+
+    <section class="card">
+      <h2>Estado de actividades</h2>
+      <div class="grid">
+        <div class="mini-card"><strong>Kickoff meme coin (PEPE)</strong><span class="badge ok">Completado</span></div>
+        <div class="mini-card"><strong>Contrato de MMLTI1</strong><span class="badge ok">Encontrado</span></div>
+        <div class="mini-card"><strong>Funcionalidad on-chain vs DIR</strong><span class="badge ok">Completado</span></div>
+        <div class="mini-card"><strong>Lista de vendedores 24h</strong><span class="badge ok">255 wallets</span></div>
+        <div class="mini-card"><strong>Memo comparativo</strong><span class="badge ok">Completado</span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Kickoff: meme coin PEPE</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Ticker</th><td>PEPE (ERC-20, Ethereum)</td></tr>
+          <tr><th>Contrato</th><td><a href="https://etherscan.io/token/0x6982508145454Ce325dDbE47a25d4ec3d2311933" target="_blank" rel="noopener"><code>0x6982508145454Ce325dDbE47a25d4ec3d2311933</code></a></td></tr>
+          <tr><th>Lanzamiento</th><td>14 de abril de 2023, stealth launch (fair-launch)</td></tr>
+          <tr><th>Supply</th><td>420.69 billones, fijo. Sin función de mint.</td></tr>
+          <tr><th>Owner</th><td>Dirección cero (<code>owner()</code> verificado on-chain): ownership renunciada</td></tr>
+          <tr><th>Venues</th><td>Binance, FameEX, BitDelta, BloFin y BTCC, además de los pares de Uniswap (liquidez de más de $32 M en el principal)</td></tr>
+          <tr><th>Ventas en 24 h</th><td>700 ventas en Uniswap, de 255 wallets distintas, unos 183 mil millones de PEPE</td></tr>
+        </table>
+      </div>
+
+      <h3>Top 5 vendedores (últimas 24 h, Uniswap)</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th class="num">#</th><th>Wallet</th><th class="num">Ventas</th><th class="num">PEPE vendido</th><th class="num">% del volumen</th></tr>
+          <tr><td class="num">1</td><td><code>0x5b43453fce04b92e190f391a83136bfbecedefd1</code></td><td class="num">46</td><td class="num">32.4 mil M</td><td class="num">17.7%</td></tr>
+          <tr><td class="num">2</td><td><code>0x4337001fff419768e088ce247456c1b892888084</code></td><td class="num">12</td><td class="num">10.7 mil M</td><td class="num">5.9%</td></tr>
+          <tr><td class="num">3</td><td><code>0x7194f3933b0a01b23be11c4c9ac66f74c3ee281e</code></td><td class="num">4</td><td class="num">8.2 mil M</td><td class="num">4.5%</td></tr>
+          <tr><td class="num">4</td><td><code>0x458f33b481405be241dd06504ce2f7489d270285</code></td><td class="num">2</td><td class="num">7.6 mil M</td><td class="num">4.1%</td></tr>
+          <tr><td class="num">5</td><td><code>0x5c4b1c037faa35b0cd1e97ecbbae33140784f1ff</code></td><td class="num">3</td><td class="num">7.5 mil M</td><td class="num">4.1%</td></tr>
+        </table>
+      </div>
+      <p>La lista completa está en <a href="pepe_sellers_24h.csv">pepe_sellers_24h.csv</a>. No incluye ventas en exchanges centralizados, que no dejan rastro por usuario.</p>
+    </section>
+
+    <section class="card">
+      <h2>Emisión Tohkn: MMLTI1</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Emisor</th><td>Sociedad de Ahorro y Crédito Multimoney, S.A. (plataforma MIO3 / TOHKN)</td></tr>
+          <tr><th>Instrumento</th><td>Token de deuda, 6.20% anual, 24 meses, $100 por token. Primer tramo de hasta $2 M; programa de hasta $10 M</td></tr>
+          <tr><th>Marco legal</th><td>Ley LEAD de El Salvador, supervisada por la CNAD (programa AD-00252)</td></tr>
+          <tr><th>Chain y estándar</th><td>Polygon, ERC-3643 (T-REX 4.1.1)</td></tr>
+          <tr><th>Contrato</th><td><a href="https://polygonscan.com/address/0x6682b57FA1148b3831aE8610cd6Cbe961d610329" target="_blank" rel="noopener"><code>0x6682b57FA1148b3831aE8610cd6Cbe961d610329</code></a> (la dirección no está en la página web: la encontramos en el DIR, página 36)</td></tr>
+          <tr><th>Arquitectura</th><td>Proxy con implementación en <code>0x1ba05496EC2bf932D522D0E2820428ca78F7a317</code>. El código fuente <strong>no está verificado</strong></td></tr>
+          <tr><th>Supply actual</th><td>11,916 tokens (~$1.19 M), 240 mints a 213 direcciones, 0 transferencias</td></tr>
+        </table>
+      </div>
+
+      <h3>Funciones de control en el contrato</h3>
+      <p>
+        <code>mint</code> / <code>batchMint</code>, <code>burn</code>, <code>forcedTransfer</code>, <code>pause</code> / <code>unpause</code>,
+        <code>setAddressFrozen</code>, <code>freezePartialTokens</code>, <code>recoveryAddress</code>, <code>setCompliance</code>,
+        <code>setIdentityRegistry</code> y <code>addAgent</code> / <code>removeAgent</code>. El token no está pausado.
+      </p>
+
+      <h3>Módulos de compliance</h3>
+      <ul>
+        <li><strong>SupplyLimitModule:</strong> tope de 20,000 tokens ($2 M).</li>
+        <li><strong>TimeTransfersLimitsModule:</strong> máximo de 20,000 tokens por identidad cada 180 días.</li>
+        <li><strong>CountryRestrictModule:</strong> restricciones por país.</li>
+        <li><strong>MaxBalanceModule:</strong> límite de saldo (no se pudo leer su parámetro).</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Lo que dice el DIR frente al código</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Afirmación del DIR</th><th class="num">Página</th><th>Resultado</th></tr>
+          <tr><td>Polygon, ERC-3643, un contrato por tramo</td><td class="num">36</td><td><span class="badge ok">Coincide</span></td></tr>
+          <tr><td>Módulos de identidad y compliance</td><td class="num">40</td><td><span class="badge ok">Coincide</span></td></tr>
+          <tr><td>Funciones de pausa y control de acceso</td><td class="num">54</td><td><span class="badge ok">Coincide</span></td></tr>
+          <tr><td>Congelar y descongelar tokens</td><td class="num">50</td><td><span class="badge ok">Coincide</span></td></tr>
+          <tr><td>Primer tramo de hasta $2 M</td><td class="num">32</td><td><span class="badge ok">Coincide: tope de 20,000 on-chain</span></td></tr>
+          <tr><td>180 días sin poder negociar</td><td class="num">37</td><td><span class="badge pending">No se ve como bloqueo total en el código</span></td></tr>
+          <tr><td>Contratos auditados por firmas independientes</td><td class="num">54</td><td><span class="badge pending">Sin reporte público encontrado</span></td></tr>
+          <tr><td>Transferencias forzadas, recuperación de wallets y cambio de implementación</td><td class="num">-</td><td><span class="badge bad">El DIR no las menciona</span></td></tr>
+        </table>
+      </div>
+    </section>
+
+
+    <section class="card">
+      <h2>Memo comparativo</h2>
+      <p>
+        <strong>Fair-launch vs emisión regulada.</strong> En PEPE la confianza vive en el código: nadie puede
+        mintear ni congelar, pero tampoco hay ningún derecho ni a quién reclamar. En MMLTI1 la confianza vive en
+        actores identificados (emisor, plataforma y regulador): hay documentos, marco legal y recurso, pero el
+        emisor tiene poderes de control, algunos que el DIR no menciona. Ningún modelo elimina el riesgo; lo reubica.
+      </p>
+      <p>Memo completo: <a href="memo.md">memo.md</a> · Detalle técnico: <a href="README.md">README.md</a></p>
+    </section>
+
+    <section class="card">
+      <h2>Lo que aprendimos</h2>
+      <p class="learned">
+        Aprendimos que auditar un token no es mirar su precio: hay que encontrar el contrato, leer qué puede hacer
+        y comparar con lo que promete su documento. Vimos que PEPE es libre pero sin ninguna protección, mientras
+        que MMLTI1 tiene reglas y un emisor responsable, pero también más poder de control para el emisor.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    Desarrollado por Cynthia Santos · 20230493 · CS031 Technology &amp; Freedom · Laboratorio 13
+  </footer>
+</body>
+</html>
