@@ -130,6 +130,3 @@ Lectura: los dos puntúan parecido por razones opuestas. PEPE gana en inmutabili
 
 Pendiente. Se redacta cuando estén las partes 2 y 3.
 
-## Parte 5 — Notas de presentación (5%)
-
-Pendiente, si aplica según la dinámica de clase.
