@@ -1,6 +1,6 @@
 # Lab 13 — Token due diligence (Sesión 15)
 
-Borrador de trabajo. Datos consultados el 2026-10-05. Pendiente: reemplazar la rúbrica provisional por la oficial del session doc S15 (privado) si se consigue.
+Datos consultados el 2026-10-05.
 
 ## Parte 1 — Kickoff: meme coin PEPE (20%)
 
@@ -106,30 +106,16 @@ Limitaciones: no cubre ventas en exchanges centralizados (Binance, FameEX, etc.)
 
 **Pendiente:** el parámetro de `MaxBalanceModule`, quién ejecuta los mints, y pedir el reporte de auditoría.
 
-## Parte 3 — Rúbrica de 10 puntos (25%)
+## Parte 3 — Memo comparativo, fair-launch vs emisión regulada (20%)
 
-> **Provisional.** La lista oficial de 10 puntos vive en el session doc S15, al que no tenemos acceso; la tabla del lab solo dice "misma rúbrica aplicada". Mientras tanto usamos una rúbrica propia de 10 criterios, con las mismas dimensiones que pide el lab, a razón de 1 punto cada uno (0, 0.5 o 1). **Hay que reemplazarla o ajustarla cuando se consiga la oficial.**
+Memo completo de unas 2 páginas en [memo.md](memo.md). Resumen:
 
-| # | Criterio | PEPE | MMLTI1 | Justificación |
-|---|---|---|---|---|
-| 1 | Contrato identificado (address, chain, explorer) | 1 | 1 | Ambos tienen dirección y explorer; MMLTI1 solo en el DIR |
-| 2 | Código fuente verificado | 1 | 0 | PEPE verificado en Etherscan; MMLTI1 sin verificar (proxy e implementación) |
-| 3 | Supply acotado y verificable | 1 | 1 | PEPE fijo, sin mint; MMLTI1 con tope de 20,000 on-chain |
-| 4 | Autoridad de mint limitada | 1 | 0.5 | PEPE sin función de mint; MMLTI1 mintea el agent, limitado por el tope |
-| 5 | Poderes de admin ausentes o divulgados y acotados | 1 | 0.5 | PEPE sin pausa, lista negra ni upgrade; MMLTI1 con pausa y congelamiento divulgados, pero transferencia forzada, recuperación y cambio de implementación no divulgados |
-| 6 | Control/ownership transparente | 1 | 0.5 | PEPE con owner renunciado; MMLTI1 con owner contrato y owner final sin identificar |
-| 7 | Documentación explica derechos y propósito | 0 | 1 | PEPE sin documento de derechos; MMLTI1 con DIR de 300+ páginas |
-| 8 | Documentación coincide con el código | 0.5 | 0.5 | PEPE sin promesas que contrastar; MMLTI1 coincide salvo poderes no divulgados y el bloqueo de 180 días |
-| 9 | Evidencia de auditoría independiente | 0 | 0 | No encontramos un reporte público en ninguno (el DIR de MMLTI1 la afirma) |
-| 10 | Marco legal y recurso del inversionista | 0 | 1 | PEPE sin emisor ni recurso; MMLTI1 con LEAD/CNAD y crédito contra el emisor |
-| | **Total** | **6.5 / 10** | **6.0 / 10** | |
+- **Dónde vive la confianza.** En PEPE vive en el código: owner renunciado, sin mint, sin pausa ni lista negra, nadie puede intervenir. En MMLTI1 vive en actores identificados (emisor Multimoney, plataforma MIO3/TOHKN y regulador CNAD), que sí pueden intervenir.
+- **PEPE.** Ventajas: reglas inmutables, código verificado, acceso sin permiso y liquidez profunda. Riesgos: no representa ningún derecho, no hay a quién reclamar y el volumen en algunos exchanges parece inflado (FameEX supera a Binance).
+- **MMLTI1.** Ventajas: crédito contra un emisor regulado, DIR de más de 300 páginas, estados financieros auditados, tope de $2 M impuesto on-chain y KYC/AML. Riesgos: el agent puede mintear (hasta el tope), forzar transferencias, congelar y pausar; el emisor puede cambiar la lógica del token; el código no está verificado; no hay reporte de auditoría público.
+- **Hallazgos sobre el DIR.** Coincide con el código en el contrato, los módulos, la pausa, el congelamiento y el tope. No menciona las transferencias forzadas, la recuperación de wallets ni el cambio de implementación, y el bloqueo de 180 días no se ve impuesto en el código.
+- **Conclusión.** Ningún modelo elimina el riesgo; lo reubica. PEPE lo traslada al comprador a cambio de libertad y reglas inmutables; MMLTI1 reduce el riesgo legal e informativo pero concentra poder de control.
 
-Lectura: los dos puntúan parecido por razones opuestas. PEPE gana en inmutabilidad y transparencia de código; MMLTI1 gana en información legal y recurso, pero pierde por código sin verificar y poderes de control no divulgados.
-
-## Parte 4 — Memo comparativo, fair-launch vs emisión regulada (20%)
-
-Pendiente. Se redacta cuando estén las partes 2 y 3.
-
-## Parte 5 — Notas de presentación (5%)
+## Parte 4 — Notas de presentación (5%)
 
 Pendiente, si aplica según la dinámica de clase.

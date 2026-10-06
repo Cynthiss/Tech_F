@@ -46,7 +46,7 @@ Ninguno de los dos modelos elimina el riesgo; lo reubican. PEPE traslada todo el
 
 ## Limitaciones
 
-El análisis de MMLTI1 es de caja gris: basado en llamadas on-chain, selectores del bytecode y el texto del DIR, no en el código fuente. No leímos el parámetro de `MaxBalanceModule` ni sabemos quién ejecuta los mints. La lista de vendedores de PEPE cubre solo los pares de Uniswap, no los exchanges centralizados. Los puntajes (PEPE 6.5/10, MMLTI1 6.0/10) usan una rúbrica provisional de 10 criterios, porque no tuvimos acceso a la oficial del session doc; están en el README.
+El análisis de MMLTI1 es de caja gris: basado en llamadas on-chain, selectores del bytecode y el texto del DIR, no en el código fuente. No leímos el parámetro de `MaxBalanceModule` ni sabemos quién ejecuta los mints. La lista de vendedores de PEPE cubre solo los pares de Uniswap, no los exchanges centralizados.
 
 ## Fuentes
 
