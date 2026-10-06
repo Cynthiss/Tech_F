@@ -116,6 +116,12 @@ Memo completo de unas 2 páginas en [memo.md](memo.md). Resumen:
 - **Hallazgos sobre el DIR.** Coincide con el código en el contrato, los módulos, la pausa, el congelamiento y el tope. No menciona las transferencias forzadas, la recuperación de wallets ni el cambio de implementación, y el bloqueo de 180 días no se ve impuesto en el código.
 - **Conclusión.** Ningún modelo elimina el riesgo; lo reubica. PEPE lo traslada al comprador a cambio de libertad y reglas inmutables; MMLTI1 reduce el riesgo legal e informativo pero concentra poder de control.
 
-## Parte 4 — Notas de presentación (5%)
+Lectura: los dos puntúan parecido por razones opuestas. PEPE gana en inmutabilidad y transparencia de código; MMLTI1 gana en información legal y recurso, pero pierde por código sin verificar y poderes de control no divulgados.
+
+## Parte 4 — Memo comparativo, fair-launch vs emisión regulada (20%)
+
+Pendiente. Se redacta cuando estén las partes 2 y 3.
+
+### Notas de presentación (5%)
 
 Pendiente, si aplica según la dinámica de clase.
