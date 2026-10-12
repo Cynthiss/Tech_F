@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laboratorio 15 - IPFS + Pinata</title>
+
+  <style>
+    :root {
+      --bg: #eef2ff;
+      --card: #ffffff;
+      --primary: #4f46e5;
+      --secondary: #7c3aed;
+      --dark: #111827;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #eef2ff, #fdf2f8);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 55px 30px;
+      text-align: center;
+    }
+
+    .hero h1 { margin: 0; font-size: 2.4rem; letter-spacing: -1px; }
+    .hero p { margin: 10px 0 0; font-size: 1.1rem; opacity: 0.95; }
+
+    .student {
+      margin-top: 20px;
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .container { max-width: 1100px; margin: -35px auto 50px; padding: 0 20px; }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 22px;
+      box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+      border: 1px solid var(--border);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #312e81;
+      font-size: 1.5rem;
+      border-left: 5px solid var(--primary);
+      padding-left: 12px;
+    }
+
+    h3 { color: #4338ca; margin-bottom: 8px; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+
+    .mini-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .mini-card strong { display: block; font-size: 1rem; margin-bottom: 6px; }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .ok { background: #dcfce7; color: #166534; }
+    .pending { background: #fef3c7; color: #92400e; }
+    .bad { background: #fee2e2; color: #991b1b; }
+
+    .table-wrap { overflow-x: auto; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { background: #f1f5f9; color: #312e81; }
+
+    code {
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      word-break: break-all;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 18px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+    }
+
+    pre code { background: none; padding: 0; color: inherit; word-break: normal; }
+
+    a { color: var(--primary); }
+
+    img.evidence {
+      max-width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      display: block;
+    }
+
+    .note {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 0.95rem;
+    }
+
+    .learned {
+      background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+      border: 1px solid #c7d2fe;
+      border-radius: 14px;
+      padding: 20px 24px;
+      font-size: 1.05rem;
+    }
+
+    footer { text-align: center; color: var(--muted); padding-bottom: 40px; font-size: 0.9rem; }
+  </style>
+</head>
+
+<body>
+  <header class="hero">
+    <h1>Laboratorio 15 - IPFS + Pinata</h1>
+    <p>CID, pin y resolve: el ciclo content-addressed completo</p>
+    <div class="student">Cynthia Santos · 20230493</div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Resumen del laboratorio</h2>
+      <p>
+        En este laboratorio se cerró el ciclo de almacenamiento <strong>content-addressed</strong>: se subió un
+        archivo pequeño sin datos personales a IPFS a través de <strong>Pinata</strong>, se obtuvo su
+        <strong>CID</strong>, se confirmó que el pin está activo, se resolvió el contenido por un
+        <strong>gateway HTTP</strong> y se documentó la política de datos del venture en
+        <a href="STORAGE.md">STORAGE.md</a>.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Estado de actividades</h2>
+      <div class="grid">
+        <div class="mini-card"><strong>CID de un archivo sin PII</strong><span class="badge ok">Generado</span></div>
+        <div class="mini-card"><strong>Pin en Pinata</strong><span class="badge ok">Activo</span></div>
+        <div class="mini-card"><strong>Resolve por gateway</strong><span class="badge ok">Verificado</span></div>
+        <div class="mini-card"><strong>STORAGE.md</strong><span class="badge ok">Completado</span></div>
+        <div class="mini-card"><strong>Comentarios de aprendizaje</strong><span class="badge ok">Redactados</span></div>
+        <div class="mini-card"><strong>API key fuera de git</strong><span class="badge ok">Protegida</span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Datos del artefacto</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Archivo</th><td><code>venture-hello.json</code> (119 bytes, <code>contains_pii: false</code>)</td></tr>
+          <tr><th>CID</th><td><code>bafkreigprxyihupukgjjjnrkurd3qq66ys5tm52xxn76apwsxymxticb5u</code></td></tr>
+          <tr><th>Provider</th><td>Pinata, plan gratuito</td></tr>
+          <tr><th>Gateway que resuelve</th><td><a href="https://black-adjacent-mackerel-93.mypinata.cloud/ipfs/bafkreigprxyihupukgjjjnrkurd3qq66ys5tm52xxn76apwsxymxticb5u" target="_blank" rel="noopener">black-adjacent-mackerel-93.mypinata.cloud/ipfs/&lt;CID&gt;</a></td></tr>
+          <tr><th>Fecha</th><td>2026-10-08</td></tr>
+          <tr><th>Resolve</th><td><span class="badge ok">sí</span> El gateway devolvió 200 con los mismos 119 bytes (SHA-256 idéntico al archivo local).</td></tr>
+        </table>
+      </div>
+      <p class="note">El CID calculado localmente, sin cuenta ni internet, coincidió con el que devolvió Pinata. Eso demuestra que el CID se deriva del contenido.</p>
+    </section>
+
+    <section class="card">
+      <h2>Flujo realizado</h2>
+      <div class="grid">
+        <div class="mini-card"><strong>1. Subir</strong>Se sube <code>venture-hello.json</code> con un script que rechaza correos, números largos, JWT y llaves privadas.</div>
+        <div class="mini-card"><strong>2. CID</strong>Pinata devuelve el identificador derivado del hash del contenido.</div>
+        <div class="mini-card"><strong>3. Pin</strong>Se confirma el pin activo en el dashboard y con <code>npm run list</code>.</div>
+        <div class="mini-card"><strong>4. Resolve</strong>Se abre <code>/ipfs/&lt;CID&gt;</code> en el gateway y se comparan los bytes con el archivo local.</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Evidencia</h2>
+      <h3>Pin activo: Pinata → Files (pestaña Public)</h3>
+      <img class="evidence" src="evidence/pinata-files.webp" alt="Pinata Files mostrando venture-hello.json, CID bafkr...icb5u, 119 B, creado el 10/8/2026" />
+
+      <h3>Resolve por gateway (curl, sin llaves)</h3>
+<pre><code>$ curl -si https://black-adjacent-mackerel-93.mypinata.cloud/ipfs/bafkreigprxyihupukgjjjnrkurd3qq66ys5tm52xxn76apwsxymxticb5u
+HTTP/2 200
+content-type: application/json
+content-length: 119
+
+{
+  "lab": "CS031 Lab 15",
+  "message": "hello from the venture",
+  "contains_pii": false,
+  "created": "2026-10-06"
+}</code></pre>
+
+      <h3>Lab log</h3>
+<pre><code>2026-10-08T18:23:38Z  pin      venture-hello.json  bafkreigprx...icb5u
+2026-10-08T18:23:53Z  resolve  bafkreigprx...icb5u  sí
+2026-10-12T19:59:39Z  resolve  bafkreigprx...icb5u  sí</code></pre>
+    </section>
+
+    <section class="card">
+      <h2>STORAGE.md: política de datos</h2>
+      <p>Los datos del venture se clasifican por sensibilidad y durabilidad, y de esa combinación sale el destino.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Dato</th><th>Sensibilidad</th><th>Durabilidad</th><th>Destino</th></tr>
+          <tr><td>Landing, imágenes y assets de marketing</td><td>Público</td><td>Meses</td><td>Location-addressed (hosting/CDN)</td></tr>
+          <tr><td>Documentos públicos que no cambian</td><td>Público</td><td>Años</td><td>IPFS + pin (Pinata)</td></tr>
+          <tr><td>Artefacto del lab (<code>venture-hello.json</code>)</td><td>Público</td><td>Efímero</td><td>IPFS + pin, como evidencia temporal</td></tr>
+          <tr><td>Notas y logs de operación</td><td>Interno</td><td>Efímero / meses</td><td>Location-addressed</td></tr>
+          <tr><td>Llaves, API keys y JWT</td><td>Interno (crítico)</td><td>Efímero</td><td>Never-permanent: gestor de secretos</td></tr>
+          <tr><td>Datos de clientes</td><td>PII</td><td>Años</td><td>Never-permanent: base cifrada con borrado</td></tr>
+          <tr><td>KYC y registros AML</td><td>Regulated</td><td>Según ley</td><td>Never-permanent: sistema auditable y borrable, nunca IPFS</td></tr>
+          <tr><td>Hash de un acta firmada (no el documento)</td><td>Público</td><td>Permanente</td><td>Raro candidato a permanencia</td></tr>
+        </table>
+      </div>
+
+      <h3>Promesas que NO haremos</h3>
+      <ul>
+        <li>"Borramos todo cuando cierras la cuenta" para contenido ya publicado con un CID público.</li>
+        <li>"Si editas el documento, la versión vieja desaparece": el CID viejo sigue vivo mientras alguien lo pinnee.</li>
+        <li>"Cumplimos el derecho al olvido" o "retiramos el contenido de internet" tras un reporte de abuso.</li>
+      </ul>
+      <h3>Promesa que SÍ haremos</h3>
+      <p>Que cada documento público tenga un CID verificable que prueba que no cambió, y mantenerlo pinneado mientras el venture opere, avisando antes de quitar el pin.</p>
+      <p>Texto completo, incluida la sección sobre el perímetro PSAV / Decreto 15-2026: <a href="STORAGE.md">STORAGE.md</a>.</p>
+    </section>
+
+    <section class="card">
+      <h2>Seguridad</h2>
+      <ul>
+        <li>El JWT de Pinata vive solo en un archivo <code>.env</code> local, que está en <code>.gitignore</code>. La API key se creó con permisos mínimos.</li>
+        <li>No se subió PII ni KYC: lo que se pinnea en IPFS público no se puede borrar de la red.</li>
+      </ul>
+    </section>
+
+
+  </main>
+
+  <footer>
+    Desarrollado por Cynthia Santos · 20230493 · CS031 Technology &amp; Freedom · Laboratorio 15
+  </footer>
+</body>
+</html>

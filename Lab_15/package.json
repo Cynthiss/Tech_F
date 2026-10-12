@@ -1,0 +1,16 @@
+{
+  "name": "lab15-ipfs-pinata",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Lab 15: IPFS + Pinata, CID + pin + resolve",
+  "scripts": {
+    "cid": "node scripts/cid-local.mjs venture-hello.json",
+    "pin": "node --env-file=.env scripts/pin.mjs venture-hello.json",
+    "list": "node --env-file=.env scripts/list-pins.mjs",
+    "resolve": "node --env-file-if-exists=.env scripts/resolve.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

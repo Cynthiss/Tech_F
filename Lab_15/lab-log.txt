@@ -1,0 +1,3 @@
+2026-10-08T18:23:38.384Z	pin	venture-hello.json	bafkreigprxyihupukgjjjnrkurd3qq66ys5tm52xxn76apwsxymxticb5u
+2026-10-08T18:23:53.045Z	resolve	bafkreigprxyihupukgjjjnrkurd3qq66ys5tm52xxn76apwsxymxticb5u	sí
+2026-10-12T19:59:39.451Z	resolve	bafkreigprxyihupukgjjjnrkurd3qq66ys5tm52xxn76apwsxymxticb5u	sí
