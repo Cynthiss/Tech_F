@@ -1,0 +1,4 @@
+2026-10-12T20:15:35.613Z [diagnóstico] probando alcance de los bootstrap nodes de HyperDHT por UDP…
+2026-10-12T20:15:40.175Z [bootstrap] ok en 4562 ms · bootstrapped=true
+2026-10-12T20:15:40.175Z [nat] firewalled=true · randomized=false · puerto local=61668
+2026-10-12T20:15:40.176Z [nodos] nodos conocidos en la tabla de ruteo: 63

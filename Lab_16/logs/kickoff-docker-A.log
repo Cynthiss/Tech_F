@@ -1,0 +1,18 @@
+2026-10-13T06:07:10.567Z [inicio] mi id 45660441 · topic "cs031-lab16-docker-20261013-6vz9" -> 51cb7628…
+2026-10-13T06:07:13.362Z [intento] intentando conectar con el peer 49511330
+2026-10-13T06:07:14.948Z [intento-fallido] peer 49511330 · error HOLEPUNCH_ABORTED
+2026-10-13T06:07:15.447Z [joined] anunciado en el DHT y buscando peers (esperando hasta 70 s)
+2026-10-13T06:07:22.447Z [intento] intentando conectar con el peer 49511330
+2026-10-13T06:07:25.449Z [estado] peers descubiertos: 1 · intentos de conexión: 2 (abiertas 0) · conexiones activas: 0
+2026-10-13T06:07:26.044Z [intento-fallido] peer 49511330 · error HOLEPUNCH_ABORTED
+2026-10-13T06:07:35.450Z [estado] peers descubiertos: 1 · intentos de conexión: 2 (abiertas 0) · conexiones activas: 0
+2026-10-13T06:07:45.451Z [estado] peers descubiertos: 1 · intentos de conexión: 2 (abiertas 0) · conexiones activas: 0
+2026-10-13T06:07:46.854Z [intento] intentando conectar con el peer 49511330
+2026-10-13T06:07:50.792Z [intento-fallido] peer 49511330 · error HOLEPUNCH_ABORTED
+2026-10-13T06:07:55.452Z [estado] peers descubiertos: 1 · intentos de conexión: 3 (abiertas 0) · conexiones activas: 0
+2026-10-13T06:08:05.451Z [estado] peers descubiertos: 1 · intentos de conexión: 3 (abiertas 0) · conexiones activas: 0
+2026-10-13T06:08:07.662Z [intento] intentando conectar con el peer 49511330
+2026-10-13T06:08:11.866Z [intento-fallido] peer 49511330 · error HOLEPUNCH_ABORTED
+2026-10-13T06:08:15.453Z [estado] peers descubiertos: 0 · intentos de conexión: 4 (abiertas 0) · conexiones activas: 0
+2026-10-13T06:08:25.450Z [fallo] sin peers tras el tiempo de espera (timeout / no peers). Corre: npm run diagnose
+2026-10-13T06:08:25.453Z [estado] peers descubiertos: 0 · intentos de conexión: 4 (abiertas 0) · conexiones activas: 0

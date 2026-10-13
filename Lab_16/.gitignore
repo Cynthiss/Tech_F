@@ -1,0 +1,7 @@
+node_modules/
+.storage/
+.storage-exp/
+downloads/
+downloads-exp/
+.env
+.DS_Store

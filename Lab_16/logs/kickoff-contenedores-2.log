@@ -1,0 +1,13 @@
+2026-10-13T06:08:53.741Z [inicio] mi id 03054c02 · topic "cs031-lab16-contenedores-20261013-6vz9" -> d11de299…
+2026-10-13T06:08:58.561Z [joined] anunciado en el DHT y buscando peers (esperando hasta 60 s)
+2026-10-13T06:09:00.120Z [connection] peer a3a55ea7 · dirección remota del socket 172.x.x.x (red local):49737
+2026-10-13T06:09:00.121Z [send] peer a3a55ea7 · payload "ping desde contenedor-2"
+2026-10-13T06:09:00.122Z [recv] peer a3a55ea7 · payload "ping desde contenedor-1"
+2026-10-13T06:09:08.566Z [estado] peers descubiertos: 1 · intentos de conexión: 0 (abiertas 0) · conexiones activas: 1
+2026-10-13T06:09:18.565Z [estado] peers descubiertos: 1 · intentos de conexión: 0 (abiertas 0) · conexiones activas: 1
+2026-10-13T06:09:28.572Z [estado] peers descubiertos: 1 · intentos de conexión: 0 (abiertas 0) · conexiones activas: 1
+2026-10-13T06:09:38.575Z [estado] peers descubiertos: 1 · intentos de conexión: 0 (abiertas 0) · conexiones activas: 1
+2026-10-13T06:09:48.575Z [estado] peers descubiertos: 1 · intentos de conexión: 0 (abiertas 0) · conexiones activas: 1
+2026-10-13T06:09:58.564Z [fin] conexiones totales: 1
+2026-10-13T06:09:58.578Z [estado] peers descubiertos: 1 · intentos de conexión: 0 (abiertas 0) · conexiones activas: 1
+2026-10-13T06:10:00.085Z [close] peer a3a55ea7 cerró la conexión

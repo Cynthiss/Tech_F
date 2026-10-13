@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laboratorio 16 - P2P con Hyperswarm</title>
+
+  <style>
+    :root {
+      --bg: #eef2ff;
+      --card: #ffffff;
+      --primary: #4f46e5;
+      --secondary: #7c3aed;
+      --dark: #111827;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #eef2ff, #fdf2f8);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 55px 30px;
+      text-align: center;
+    }
+
+    .hero h1 { margin: 0; font-size: 2.4rem; letter-spacing: -1px; }
+    .hero p { margin: 10px 0 0; font-size: 1.1rem; opacity: 0.95; }
+
+    .student {
+      margin-top: 20px;
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .container { max-width: 1100px; margin: -35px auto 50px; padding: 0 20px; }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 22px;
+      box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+      border: 1px solid var(--border);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #312e81;
+      font-size: 1.5rem;
+      border-left: 5px solid var(--primary);
+      padding-left: 12px;
+    }
+
+    h3 { color: #4338ca; margin-bottom: 8px; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+
+    .mini-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .mini-card strong { display: block; font-size: 1rem; margin-bottom: 6px; }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .ok { background: #dcfce7; color: #166534; }
+    .pending { background: #fef3c7; color: #92400e; }
+    .bad { background: #fee2e2; color: #991b1b; }
+
+    .table-wrap { overflow-x: auto; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { background: #f1f5f9; color: #312e81; }
+
+    code {
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      word-break: break-all;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 18px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    pre code { background: none; padding: 0; color: inherit; word-break: normal; }
+
+    a { color: var(--primary); }
+
+    .note {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 0.95rem;
+    }
+
+    .learned {
+      background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+      border: 1px solid #c7d2fe;
+      border-radius: 14px;
+      padding: 20px 24px;
+      font-size: 1.05rem;
+    }
+
+    footer { text-align: center; color: var(--muted); padding-bottom: 40px; font-size: 0.9rem; }
+  </style>
+</head>
+
+<body>
+  <header class="hero">
+    <h1>Laboratorio 16 - P2P sin servidor</h1>
+    <p>Hyperswarm, Hypercore y el experimento de matar al seeder</p>
+    <div class="student">Cynthia Santos · 20230493</div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Resumen del laboratorio</h2>
+      <p>
+        En este laboratorio se quitó al provider de en medio: dos peers se descubrieron por un
+        <strong>topic de Hyperswarm</strong> sobre HyperDHT, se pasaron un mensaje directo, replicaron un archivo
+        con <strong>Hypercore</strong> y se probó qué pasa cuando se mata al <strong>seeder</strong> a mitad de la
+        transferencia. El análisis de liability (host centralizado contra usuarios que seedean) está en
+        <a href="P2P.md">P2P.md</a>.
+      </p>
+      <p class="note">
+        Las pruebas son reales, pero <strong>no son con un compañero</strong>: no hubo uno disponible. Los peers corrieron en esta máquina
+        o en <strong>contenedores Docker</strong>, y cada resultado está marcado así. Se usó Node.js con Hyperswarm (el fallback permitido por el lab, sin Pear).
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Estado de actividades</h2>
+      <div class="grid">
+        <div class="mini-card"><strong>Join al topic (Hyperswarm)</strong><span class="badge ok">Verificado</span></div>
+        <div class="mini-card"><strong>Mensaje entre dos peers</strong><span class="badge ok">Local y Docker</span></div>
+        <div class="mini-card"><strong>Máquina ↔ contenedor</strong><span class="badge bad">Falló: HOLEPUNCH_ABORTED</span></div>
+        <div class="mini-card"><strong>Mensaje con un compañero</strong><span class="badge pending">No realizado</span></div>
+        <div class="mini-card"><strong>Transferencia de archivo</strong><span class="badge ok">Completada</span></div>
+        <div class="mini-card"><strong>Experimento kill-seeder</strong><span class="badge ok">Registrado</span></div>
+        <div class="mini-card"><strong>P2P.md</strong><span class="badge ok">Completado</span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Del topic al intercambio</h2>
+<pre><code>"cs031-lab16-prueba-local-..."            (string acordado)
+        │ SHA-256
+        ▼
+topic de 32 bytes (3e367a87…)             (un nombre de enjambre, no un servidor)
+        │ join(topic, server+client)
+        ▼
+HyperDHT (estilo Kademlia): announce + lookup
+        │ bootstrap nodes → 63 nodos conocidos
+        ▼
+peer encontrado (clave pública d0b877d1)
+        │ handshake cifrado (Noise) + holepunch
+        ▼
+conexión directa cifrada peer ↔ peer
+        ├─ mensajes: "ping desde 20230493" ⇄ "ping desde prueba-local-B"
+        └─ Hypercore: log append-only firmado, replicado por bloques</code></pre>
+    </section>
+
+    <section class="card">
+      <h2>Kickoff: mensaje entre dos peers (misma máquina)</h2>
+      <p>Log del peer A (el peer B registró lo mismo desde su lado, ver <a href="logs/kickoff-local-B.log">kickoff-local-B.log</a>):</p>
+<pre><code>20:16:03.125Z [inicio]     mi id eff21939 · topic "cs031-lab16-prueba-local-20261012-a7f3" -> 3e367a87…
+20:16:07.090Z [joined]     anunciado en el DHT y buscando peers
+20:16:07.941Z [connection] peer d0b877d1 · dirección remota del socket 10.x.x.x (red local):49738
+20:16:07.941Z [send]       peer d0b877d1 · payload "ping desde 20230493"
+20:16:07.942Z [recv]       peer d0b877d1 · payload "ping desde prueba-local-B"</code></pre>
+      <p>
+        <strong>Qué vio el peer de la contraparte:</strong> su clave pública (se muestran 8 caracteres), el topic y la
+        <strong>dirección remota del socket</strong> (IP y puerto). Aquí fue una IP de la red local porque ambos peers estaban en la misma máquina; con un compañero en otra red sería su IP pública. P2P no da anonimato.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Segundo peer sin compañero: Docker</h2>
+      <p>
+        Como no hubo un compañero disponible, el script <code>scripts/prueba-docker.sh</code> usa contenedores como peers, con topics únicos
+        para no cruzarse con otras personas.
+      </p>
+      <h3>Contenedor 1 ↔ contenedor 2 (misma red de Docker): conectaron</h3>
+<pre><code>06:08:56.628Z [inicio]     mi id a3a55ea7 · topic "cs031-lab16-contenedores-20261013-6vz9" -> d11de299…
+06:09:00.113Z [connection] peer 03054c02 · dirección remota del socket 172.x.x.x (red local):49737
+06:09:00.116Z [send]       peer 03054c02 · payload "ping desde contenedor-1"
+06:09:00.123Z [recv]       peer 03054c02 · payload "ping desde contenedor-2"</code></pre>
+      <h3>Tu máquina ↔ contenedor: no conectaron</h3>
+<pre><code>06:07:13.362Z [intento]         intentando conectar con el peer 49511330
+06:07:14.948Z [intento-fallido] peer 49511330 · error HOLEPUNCH_ABORTED
+06:07:26.044Z [intento-fallido] peer 49511330 · error HOLEPUNCH_ABORTED
+06:07:50.792Z [intento-fallido] peer 49511330 · error HOLEPUNCH_ABORTED
+06:08:11.866Z [intento-fallido] peer 49511330 · error HOLEPUNCH_ABORTED
+06:08:25.450Z [fallo] sin peers tras el tiempo de espera (timeout / no peers)</code></pre>
+      <p>
+        <strong>Diagnóstico:</strong> el DHT sí presentó a los peers (A descubrió a B), pero el camino directo necesita atravesar el NAT, y aquí hay dos NAT
+        encadenados (la red virtual de Docker y el router). Sin <code>relayThrough</code> no hay plan B. Es la causa más probable; no se confirmó con otra prueba.
+        <strong>Descubrir un peer no es lo mismo que poder conectarse.</strong> Logs:
+        <a href="logs/kickoff-contenedores-1.log">contenedor 1</a>, <a href="logs/kickoff-contenedores-2.log">contenedor 2</a>,
+        <a href="logs/kickoff-docker-A.log">máquina (A)</a> y <a href="logs/kickoff-docker-B.log">contenedor (B)</a>.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Diagnóstico de red</h2>
+<pre><code>20:15:40.175Z [bootstrap] ok en 4562 ms · bootstrapped=true
+20:15:40.175Z [nat]       firewalled=true · randomized=false
+20:15:40.176Z [nodos]     nodos conocidos en la tabla de ruteo: 63</code></pre>
+      <p>
+        Infraestructura que sí se usó aunque no haya servidor propio: los <strong>bootstrap nodes</strong> de HyperDHT
+        (<code>node1.hyperdht.org</code>, <code>node2.hyperdht.org</code> y <code>node3.hyperdht.org</code>, puerto 49737).
+        <code>firewalled=true</code> indica que detrás del router hace falta holepunch; en la prueba local no se ejerció un holepunch real entre redes distintas.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Transferencia de archivo y kill-seeder</h2>
+      <p>
+        Archivo <code>sample/lab16-sample.txt</code>: <strong>280,088 bytes</strong> (menos de 1 MB, texto generado, sin PII ni copyright),
+        dividido en 69 bloques de 4,096 bytes más una cabecera con el SHA-256. El downloader verificó el hash y coincidió.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <tr><th></th><th>Escenario 1: un solo seeder</th><th>Escenario 2: hay otro seeder</th></tr>
+          <tr><th>Qué se hizo</th><td><code>kill -9</code> al seeder tras 20 de 69 bloques</td><td><code>kill -9</code> al seeder A con ~22 bloques; C ya tenía todo y seguía sirviendo</td></tr>
+          <tr><th>Qué vio el downloader</th><td>Siguió "conectado" al peer muerto; el bloque 21 nunca llegó</td><td>La conexión con A dio <code>ETIMEDOUT</code> 13.25 s después del kill</td></tr>
+          <tr><th>Resultado</th><td><span class="badge bad">Incompleto</span> Se atascó a los 12 s con 20/69 bloques (29%)</td><td><span class="badge ok">Completo</span> Retomó con C y terminó 22.8 s después del kill, SHA-256 idéntico</td></tr>
+          <tr><th>Log</th><td><a href="logs/exp1-downloader.log">exp1-downloader.log</a></td><td><a href="logs/exp2-downloader.log">exp2-downloader.log</a></td></tr>
+        </table>
+      </div>
+<pre><code>20:18:49.857Z [KILL]  kill -9 al seeder A a mitad de la descarga
+20:19:01.929Z [STALL] el bloque 21/69 no llegó en 12 s · descargados 20 de 69 bloques · peers activos 1
+
+20:19:17.310Z [KILL]  kill -9 al seeder A; C sigue vivo como seeder
+20:19:30.561Z [error] peer d7e55d1e · ETIMEDOUT
+20:19:40.112Z [COMPLETO] 280088 bytes · sha256 COINCIDE con el del seeder</code></pre>
+      <p>
+        La disponibilidad no dependió de un nodo especial sino de cuántos seeders quedaban. Matar un proceso no avisa al
+        otro lado: el downloader tardó unos 13 s en enterarse.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>P2P.md: liability y contexto legal</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th></th><th>Host centralizado</th><th>Usuarios que seedean</th></tr>
+          <tr><th>Takedowns</th><td>A la empresa que hostea</td><td>A quien sirve el archivo; sin un único destinatario</td></tr>
+          <tr><th>Requerimientos de autoridad</th><td>A la empresa, con domicilio y registros</td><td>A quien opere el servicio visible</td></tr>
+          <tr><th>Kill switch</th><td>Se apaga el servidor</td><td>No hay uno; hay que apagar cada seeder</td></tr>
+        </table>
+      </div>
+      <ul>
+        <li><strong>Grokster (2005):</strong> distribuir software con el objeto de promover la infracción puede generar responsabilidad (inducement), aunque no se hostee el contenido.</li>
+        <li><strong>Napster contra BitTorrent:</strong> un índice central apunta la demanda a la empresa; un swarm la dispersa hacia desarrolladores, operadores de trackers y usuarios con IP visible.</li>
+        <li><strong>Decreto 15-2026:</strong> si el venture es Persona Obligada (PSAV), "no hay servidor" no borra KYC, registro ni reportes; el reglamento del art. 127 está pendiente.</li>
+      </ul>
+      <p>Documento completo: <a href="P2P.md">P2P.md</a> · Guía de uso: <a href="README.md">README.md</a></p>
+    </section>
+
+    <section class="card">
+      <h2>Privacidad</h2>
+      <ul>
+        <li>Los logs guardan las IPs enmascaradas; la dirección completa solo se muestra en pantalla.</li>
+        <li>El archivo compartido no contiene PII ni contenido con copyright.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Lo que aprendimos</h2>
+      <p class="learned">
+        Aprendimos que en P2P no hay un servidor que sepa dónde está cada quien: los peers se encuentran por un topic
+        en una DHT y se conectan directo. Aun así hubo infraestructura, los bootstrap nodes, y el peer ve la IP de su
+        contraparte, así que P2P no es anonimato. Descubrir un peer no es lo mismo que poder conectarse: entre dos contenedores conectaron,
+        pero entre mi máquina y un contenedor el hole-punching falló. Y al matar al seeder sin otro disponible la descarga se atascó,
+        mientras que con un segundo seeder terminó: la disponibilidad depende de cuántos peers sigan sirviendo.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    Desarrollado por Cynthia Santos · 20230493 · CS031 Technology &amp; Freedom · Laboratorio 16
+  </footer>
+</body>
+</html>

@@ -1,0 +1,16 @@
+2026-10-12T20:19:11.840Z [fetch] buscando el core 9fa6dc3e… (discovery 545d0d62…)
+2026-10-12T20:19:13.058Z [connection] peer d7e55d1e · 10.x.x.x (red local):49737 (peers activos: 1)
+2026-10-12T20:19:13.078Z [fetch] archivo lab16-sample.txt · 280088 bytes · 69 bloques · delay 200 ms por bloque
+2026-10-12T20:19:13.859Z [connection] peer ff021046 · 10.x.x.x (red local):49738 (peers activos: 2)
+2026-10-12T20:19:14.915Z [progreso] 10/69 bloques
+2026-10-12T20:19:16.950Z [progreso] 20/69 bloques
+2026-10-12T20:19:17.310Z [KILL] kill -9 al seeder A (pid 25554); C sigue vivo como seeder
+2026-10-12T20:19:30.561Z [error] peer d7e55d1e · ETIMEDOUT
+2026-10-12T20:19:30.564Z [close] peer d7e55d1e se desconectó (peers activos: 1) · bloques locales 23/70
+2026-10-12T20:19:31.986Z [progreso] 30/69 bloques
+2026-10-12T20:19:34.019Z [progreso] 40/69 bloques
+2026-10-12T20:19:36.049Z [progreso] 50/69 bloques
+2026-10-12T20:19:38.081Z [progreso] 60/69 bloques
+2026-10-12T20:19:39.907Z [progreso] 69/69 bloques
+2026-10-12T20:19:40.112Z [COMPLETO] 280088 bytes · sha256 COINCIDE con el del seeder · guardado en downloads-exp/exp2-D.txt
+2026-10-12T20:19:40.114Z [close] peer ff021046 se desconectó (peers activos: 0) · bloques locales 70/70

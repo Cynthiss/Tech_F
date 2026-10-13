@@ -1,0 +1,7 @@
+2026-10-12T20:16:05.098Z [inicio] mi id d0b877d1 · topic "cs031-lab16-prueba-local-20261012-a7f3" -> 3e367a87…
+2026-10-12T20:16:07.938Z [connection] peer eff21939 · dirección remota del socket 10.x.x.x (red local):49737
+2026-10-12T20:16:07.939Z [send] peer eff21939 · payload "ping desde prueba-local-B"
+2026-10-12T20:16:07.943Z [recv] peer eff21939 · payload "ping desde 20230493"
+2026-10-12T20:16:09.083Z [joined] anunciado en el DHT y buscando peers (esperando hasta 30 s)
+2026-10-12T20:16:39.084Z [fin] conexiones totales: 1
+2026-10-12T20:16:40.440Z [close] peer eff21939 cerró la conexión

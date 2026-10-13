@@ -1,0 +1,17 @@
+2026-10-12T20:19:06.712Z [fetch] buscando el core 9fa6dc3e… (discovery 545d0d62…)
+2026-10-12T20:19:11.468Z [connection] peer d7e55d1e · 10.x.x.x (red local):49737 (peers activos: 1)
+2026-10-12T20:19:11.488Z [fetch] archivo lab16-sample.txt · 280088 bytes · 69 bloques · delay 0 ms por bloque
+2026-10-12T20:19:11.498Z [progreso] 10/69 bloques
+2026-10-12T20:19:11.510Z [progreso] 20/69 bloques
+2026-10-12T20:19:11.516Z [progreso] 30/69 bloques
+2026-10-12T20:19:11.522Z [progreso] 40/69 bloques
+2026-10-12T20:19:11.531Z [progreso] 50/69 bloques
+2026-10-12T20:19:11.540Z [progreso] 60/69 bloques
+2026-10-12T20:19:11.548Z [progreso] 69/69 bloques
+2026-10-12T20:19:11.549Z [COMPLETO] 280088 bytes · sha256 COINCIDE con el del seeder · guardado en downloads-exp/exp2-C.txt
+2026-10-12T20:19:11.549Z [seed] sigo sirviendo el archivo como seeder durante 90 s
+2026-10-12T20:19:13.865Z [connection] peer 0a0865e1 · 10.x.x.x (red local):49739 (peers activos: 2)
+2026-10-12T20:19:34.549Z [error] peer d7e55d1e · ETIMEDOUT
+2026-10-12T20:19:34.555Z [close] peer d7e55d1e se desconectó (peers activos: 1) · bloques locales 70/70
+2026-10-12T20:19:40.114Z [error] peer 0a0865e1 · ECONNRESET
+2026-10-12T20:19:40.114Z [close] peer 0a0865e1 se desconectó (peers activos: 0) · bloques locales 70/70

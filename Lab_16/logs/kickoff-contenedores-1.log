@@ -1,0 +1,16 @@
+2026-10-13T06:08:56.628Z [inicio] mi id a3a55ea7 · topic "cs031-lab16-contenedores-20261013-6vz9" -> d11de299…
+2026-10-13T06:08:59.756Z [intento] intentando conectar con el peer 03054c02
+2026-10-13T06:09:00.113Z [connection] peer 03054c02 · dirección remota del socket 172.x.x.x (red local):49737
+2026-10-13T06:09:00.116Z [send] peer 03054c02 · payload "ping desde contenedor-1"
+2026-10-13T06:09:00.123Z [recv] peer 03054c02 · payload "ping desde contenedor-2"
+2026-10-13T06:09:01.343Z [joined] anunciado en el DHT y buscando peers (esperando hasta 60 s)
+2026-10-13T06:09:11.348Z [estado] peers descubiertos: 1 · intentos de conexión: 1 (abiertas 1) · conexiones activas: 1
+2026-10-13T06:09:21.355Z [estado] peers descubiertos: 1 · intentos de conexión: 1 (abiertas 1) · conexiones activas: 1
+2026-10-13T06:09:31.358Z [estado] peers descubiertos: 1 · intentos de conexión: 1 (abiertas 1) · conexiones activas: 1
+2026-10-13T06:09:41.360Z [estado] peers descubiertos: 1 · intentos de conexión: 1 (abiertas 1) · conexiones activas: 1
+2026-10-13T06:09:51.363Z [estado] peers descubiertos: 1 · intentos de conexión: 1 (abiertas 1) · conexiones activas: 1
+2026-10-13T06:10:00.086Z [intento-fallido] peer 03054c02 · error ECONNRESET
+2026-10-13T06:10:00.088Z [error] peer 03054c02 · ECONNRESET
+2026-10-13T06:10:00.090Z [close] peer 03054c02 cerró la conexión
+2026-10-13T06:10:01.352Z [fin] conexiones totales: 1
+2026-10-13T06:10:01.364Z [estado] peers descubiertos: 1 · intentos de conexión: 1 (abiertas 1) · conexiones activas: 0

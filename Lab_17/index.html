@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laboratorio 17 - Tor Browser y THREAT.md</title>
+
+  <style>
+    :root {
+      --bg: #eef2ff;
+      --card: #ffffff;
+      --primary: #4f46e5;
+      --secondary: #7c3aed;
+      --dark: #111827;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #eef2ff, #fdf2f8);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 55px 30px;
+      text-align: center;
+    }
+
+    .hero h1 { margin: 0; font-size: 2.4rem; letter-spacing: -1px; }
+    .hero p { margin: 10px 0 0; font-size: 1.1rem; opacity: 0.95; }
+
+    .student {
+      margin-top: 20px;
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .container { max-width: 1100px; margin: -35px auto 50px; padding: 0 20px; }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 22px;
+      box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+      border: 1px solid var(--border);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #312e81;
+      font-size: 1.5rem;
+      border-left: 5px solid var(--primary);
+      padding-left: 12px;
+    }
+
+    h3 { color: #4338ca; margin-bottom: 8px; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+
+    .mini-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .mini-card strong { display: block; font-size: 1rem; margin-bottom: 6px; }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .ok { background: #dcfce7; color: #166534; }
+    .pending { background: #fef3c7; color: #92400e; }
+    .bad { background: #fee2e2; color: #991b1b; }
+
+    .table-wrap { overflow-x: auto; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { background: #f1f5f9; color: #312e81; }
+
+    code {
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      word-break: break-all;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 18px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    pre code { background: none; padding: 0; color: inherit; word-break: normal; }
+
+    a { color: var(--primary); }
+
+    .note {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 0.95rem;
+    }
+
+    .learned {
+      background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+      border: 1px solid #c7d2fe;
+      border-radius: 14px;
+      padding: 20px 24px;
+      font-size: 1.05rem;
+    }
+
+    footer { text-align: center; color: var(--muted); padding-bottom: 40px; font-size: 0.9rem; }
+    .circuit { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+    .hop { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; }
+    .hop small { display: block; color: var(--muted); }
+    figure { margin: 0; }
+    figure img { max-width: 100%; border-radius: 12px; border: 1px solid var(--border); }
+    figcaption { color: var(--muted); font-size: 0.9rem; margin-top: 6px; }
+  </style>
+</head>
+
+<body>
+  <header class="hero">
+    <h1>Laboratorio 17 - Tor Browser y threat model</h1>
+    <p>Circuit display real, tabla quién-ve-qué y THREAT.md: Solo HTTPS vs Tor vs I2P</p>
+    <div class="student">Cynthia Santos · 20230493</div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Resumen del laboratorio</h2>
+      <p>
+        Lab de <strong>observación y análisis</strong>, no de operación de red. Con <strong>Tor Browser oficial</strong>
+        (descargado de torproject.org, configuración por defecto) se observó el circuito real hacia un sitio clearnet HTTPS,
+        se convirtió en una tabla de quién-ve-qué y se contrastó con el navegador normal. El homework es
+        <a href="THREAT.md">THREAT.md</a>: el threat model del flow de onboarding con KYC del venture.
+      </p>
+      <p class="note">
+        Tesis: HTTPS cifra el <strong>qué</strong> (payload); Tor intenta esconder el <strong>quién ↔ con quién</strong> (metadata).
+        Son propiedades distintas y se combinan.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Estado de actividades</h2>
+      <div class="grid">
+        <div class="mini-card"><strong>Tor Browser oficial conectado</strong><span class="badge ok">Sí, config. default</span></div>
+        <div class="mini-card"><strong>Circuit display capturado</strong><span class="badge ok">Ver capturas</span></div>
+        <div class="mini-card"><strong>New Tor Circuit</strong><span class="badge ok">Registrado</span></div>
+        <div class="mini-card"><strong>Tabla quién-ve-qué + contraste</strong><span class="badge ok">Completada</span></div>
+        <div class="mini-card"><strong>THREAT.md (7 filas)</strong><span class="badge ok">Completado</span></div>
+        <div class="mini-card"><strong>Adversarios + 3 límites + I2P</strong><span class="badge ok">Completado</span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Parte A: circuito observado</h2>
+      <p>Tor Browser 15.0.24 (Firefox 140.17.0esr), actualizado. Red usada: casa (ISP residencial). Sitio: <code>https://www.ufm.edu/</code>. Sin IPs completas.</p>
+      <div class="circuit">
+        <div class="hop"><strong>Este navegador</strong><small>yo</small></div>
+        <div class="hop"><strong>Estados Unidos</strong><small>guard</small></div>
+        <div class="hop"><strong>Finlandia</strong><small>middle</small></div>
+        <div class="hop"><strong>Alemania</strong><small>exit</small></div>
+        <div class="hop"><strong>www.ufm.edu</strong><small>sitio (403)</small></div>
+      </div>
+      <h3>Después de "Nuevo circuito Tor para este sitio"</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Hop</th><th>Antes</th><th>Después</th><th>¿Cambió?</th></tr>
+          <tr><td>Guard</td><td>Estados Unidos</td><td>Reino Unido</td><td><span class="badge pending">Ver nota</span> volvió al relay de la primera prueba</td></tr>
+          <tr><td>Middle</td><td>Finlandia</td><td>Alemania</td><td>Sí</td></tr>
+          <tr><td>Exit</td><td>Alemania</td><td>Alemania</td><td>Sí: otro relay</td></tr>
+        </table>
+      </div>
+      <p>
+        <strong>El guard:</strong> a las 4:57 p.m. (torproject.org) fue un relay de Reino Unido; en la noche, el circuito 1 usó uno de
+        Estados Unidos y el circuito 2 volvió <strong>al mismo relay de Reino Unido</strong> (misma IP, comparada en privado). Ese es el guard
+        estable: Tor mantiene una lista corta de <em>primary guards</em> y usa el primero que responda, así que el de Estados Unidos
+        parece un respaldo temporal (hipótesis). Middle y exit sí se sortean en cada circuito; el guard no, para no caer con el tiempo
+        en uno malicioso que vería mi IP. En las tres capturas el panel dice "Tu nodo guard no puede ser cambiado".
+      </p>
+      <div class="grid">
+        <figure><img src="evidence/circuit-1.png" alt="Circuit display de www.ufm.edu, IPs tapadas" /><figcaption>Circuito 1 (IPs tapadas)</figcaption></figure>
+        <figure><img src="evidence/circuit-2.png" alt="Circuit display tras New Tor Circuit, IPs tapadas" /><figcaption>Circuito 2, tras New Tor Circuit (IPs tapadas)</figcaption></figure>
+      </div>
+      <h3>Hallazgos</h3>
+      <ul>
+        <li><strong>Redirección a .onion:</strong> <code>torproject.org</code> abrió su versión .onion y el circuito no tenía exit ("Relays de sitio Onion"). Los onion services están fuera de alcance, así que se usó un sitio clearnet sin cambiar ninguna configuración.</li>
+        <li><strong>403 Forbidden:</strong> <code>www.ufm.edu</code> rechazó la petición por Tor y cargó normal en el navegador de siempre. La lista de exits es pública: el sitio no sabe quién soy, pero sí que vengo de Tor.</li>
+      </ul>
+      <div class="grid">
+        <figure><img src="evidence/circuit-onion-torproject.png" alt="Circuit display de torproject.org redirigido a .onion, IPs tapadas" /><figcaption>torproject.org redirigido a .onion: guard Reino Unido → Alemania → Reino Unido → relays de sitio Onion, sin exit. "Tu nodo guard no puede ser cambiado" (IPs tapadas)</figcaption></figure>
+        <figure><img src="evidence/ufm-403-tor.png" alt="www.ufm.edu responde 403 Forbidden por Tor" /><figcaption>www.ufm.edu por Tor: 403 Forbidden (en el navegador normal carga)</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Parte B: quién ve qué</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Punto</th><th>Ve</th><th>No ve</th></tr>
+          <tr><td>Red local / ISP (casa)</td><td>Mi IP; que uso Tor (IP del guard, pública); volumen y tiempos</td><td>Destino; contenido</td></tr>
+          <tr><td>Guard (EE. UU. / Reino Unido)</td><td>Mi IP; IP del middle; volumen y tiempos</td><td>Destino; contenido</td></tr>
+          <tr><td>Middle (Finlandia)</td><td>IP del guard e IP del exit</td><td>Mi IP; destino; contenido</td></tr>
+          <tr><td>Exit (Alemania)</td><td>Destino (<code>www.ufm.edu</code>); IP del middle; con HTTPS solo bytes cifrados, tamaño y tiempos</td><td>Mi IP; contenido</td></tr>
+          <tr><td>Sitio (<code>www.ufm.edu</code>)</td><td>IP del exit, y por eso que vengo de Tor; lo que yo le dé (login, cookies, formularios)</td><td>Mi IP real; quién soy</td></tr>
+        </table>
+      </div>
+      <h3>Contraste con el navegador normal</h3>
+      <p>
+        Sin Tor el sitio cargó y vio mi <strong>IP real</strong> (ubicación aproximada y proveedor). Mi ISP vio mi IP, la IP del servidor
+        y el hostname <code>www.ufm.edu</code> (DNS y SNI), además de hora y volumen; no el contenido, por HTTPS. Con Tor esa
+        información queda repartida: el ISP solo ve un guard y el sitio solo ve un exit.
+      </p>
+      <p class="note">
+        <strong>Si el exit fuera malicioso</strong>, con este sitio HTTPS podría ver el dominio, la IP del servidor, la hora y cuántos bytes
+        van y vienen, y no podría ver mi IP, la URL completa ni el contenido de las páginas, cookies o formularios.
+      </p>
+<pre><code>connected: sí
+el exit ve: el destino (www.ufm.edu) y el volumen/tiempos, pero no mi IP ni el contenido (HTTPS)</code></pre>
+    </section>
+
+    <section class="card">
+      <h2>THREAT.md: onboarding con KYC</h2>
+      <p>Flow: login y subida de DPI + selfie con <code>POST /kyc</code> por HTTPS. Payload = imágenes y datos; metadata = IP, destino, hora, tamaño.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Pregunta</th><th>Solo HTTPS</th><th>Tor (vía exit)</th><th>I2P (in-net)</th></tr>
+          <tr><th>IP del usuario</th><td>ISP, camino, CDN y venture</td><td>ISP y guard; el venture ve un exit</td><td>ISP y primer router del tunnel; el servicio ve un destino I2P</td></tr>
+          <tr><th>Destino</th><td>ISP y red local (DNS, SNI, IP)</td><td>El exit; el ISP solo ve "usa Tor"</td><td>Ningún router intermedio (leaseSet + tunnels)</td></tr>
+          <tr><th>Payload</th><td>Usuario y venture</td><td>Igual: TLS sigue; relays ven bytes cifrados</td><td>Usuario y venture</td></tr>
+          <tr><th>Exit / relay malicioso</th><td>Equivale a ISP malicioso: ve destino, no DPI</td><td>Ve destino, hora y MB; puede bloquear; no lee el DPI</td><td>No hay exit; un router ve vecinos y bytes cifrados</td></tr>
+          <tr><th>Si inicia sesión</th><td>Nada nuevo</td><td>Anonimato frente al venture se acaba</td><td>Igual que Tor</td></tr>
+          <tr><th>Costo</th><td>Ninguno</td><td>Latencia, CAPTCHAs, bloqueo de exits (403 de ufm.edu)</td><td>Instalar router, sin app móvil, servicio in-net</td></tr>
+          <tr><th>Qué sigue viendo el venture</th><td>Todo</td><td>KYC, cuenta, transacciones; no la IP real</td><td>KYC completo; no la IP</td></tr>
+        </table>
+      </div>
+      <ul>
+        <li><strong>Adversarios:</strong> HTTPS defiende contra lectura en el camino; Tor agrega defensa contra red local, ISP y un gobierno con visibilidad parcial. Ninguna defiende contra <strong>correlation end-to-end</strong> ni contra el venture mismo.</li>
+        <li><strong>Tres cosas que Tor no protege:</strong> (1) login y KYC en la capa de aplicación; (2) correlación de tiempos y tamaños; (3) tráfico fuera de Tor Browser, EXIF de las fotos y fingerprinting.</li>
+        <li><strong>I2P:</strong> tunnels unidireccionales inbound/outbound, netDb sin directory authorities, garlic encryption con cloves; pensado para servicios dentro de la red, no para salir al clearnet.</li>
+        <li><strong>Decreto 15-2026:</strong> si somos Persona Obligada, aceptar Tor no cambia el deber de identificar, registrar y reportar; qué conservar depende del reglamento pendiente del art. 127. Iniciativa 6538 no es ley.</li>
+      </ul>
+      <p>Documento completo: <a href="THREAT.md">THREAT.md</a> · Notas: <a href="KICKOFF.md">KICKOFF.md</a> · Guía: <a href="README.md">README.md</a></p>
+    </section>
+
+    <section class="card">
+      <h2>Límites respetados</h2>
+      <ul>
+        <li>Solo Tor Browser oficial con configuración por defecto; sin reconfigurar la selección de nodos.</li>
+        <li>Solo sitios clearnet HTTPS públicos y legales; sin onion services, eepsites, relays ni bridges.</li>
+        <li>Hecho desde la red de casa, sin evadir controles de red de ninguna institución. Capturas sin IPs completas.</li>
+      </ul>
+    </section>
+
+  
+  </main>
+
+  <footer>
+    Desarrollado por Cynthia Santos · 20230493 · CS031 Technology &amp; Freedom · Laboratorio 17
+  </footer>
+</body>
+</html>

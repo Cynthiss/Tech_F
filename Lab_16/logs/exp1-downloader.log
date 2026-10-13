@@ -1,0 +1,8 @@
+2026-10-12T20:18:43.364Z [fetch] buscando el core 42cce502… (discovery 19fdc377…)
+2026-10-12T20:18:45.844Z [connection] peer 885e813b · 10.x.x.x (red local):49737 (peers activos: 1)
+2026-10-12T20:18:45.861Z [fetch] archivo lab16-sample.txt · 280088 bytes · 69 bloques · delay 200 ms por bloque
+2026-10-12T20:18:47.694Z [progreso] 10/69 bloques
+2026-10-12T20:18:49.725Z [progreso] 20/69 bloques
+2026-10-12T20:18:49.857Z [KILL] kill -9 al seeder A (pid 25340) a mitad de la descarga
+2026-10-12T20:19:01.929Z [STALL] el bloque 21/69 no llegó en 12 s (el seeder se cayó y no hay otro) · descargados 20 de 69 bloques · peers activos 1
+2026-10-12T20:19:01.934Z [close] peer 885e813b se desconectó (peers activos: 0) · bloques locales 21/70

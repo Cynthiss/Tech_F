@@ -1,0 +1,5 @@
+2026-10-12T20:19:02.147Z [seed] archivo lab16-sample.txt · 280088 bytes · 69 bloques de 4096 B · sha256 cb0f8c2a366a…
+2026-10-12T20:19:02.149Z [seed] KEY=9fa6dc3e1ba3535ca78109ccfffd14cfd1423bcbdeeb6b8734a7c11f65077ea1
+2026-10-12T20:19:06.404Z [seed] sirviendo (discovery 545d0d62…). Ctrl+C o kill para detener.
+2026-10-12T20:19:11.472Z [connection] peer ff021046 · 10.x.x.x (red local):49738 · replicando
+2026-10-12T20:19:13.062Z [connection] peer 0a0865e1 · 10.x.x.x (red local):49739 · replicando
