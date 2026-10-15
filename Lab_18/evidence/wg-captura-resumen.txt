@@ -1,0 +1,18 @@
+Paquetes UDP con puerto 51820: 14
+
+Tipo de mensaje            Bytes  Paquetes
+Handshake Initiation         148         1
+Handshake Response            92         1
+Transport Data               128        12
+
+Ejemplo de Transport Data (primeros 48 bytes en hexadecimal):
+04 00 00 00 1d 91 8f 5a 00 00 00 00 00 00 00 00 59 63 44 94 91 24 fe c7 d4 a4 e7 16 50 06 54 48 2b b3 0b 9e 25 d7 dc 66 c0 02 13 63 b1 e4 69 38
+
+Texto 'LAB18SECRET' dentro de la captura de la red: NO aparece (el payload es ilegible)
+Lo que ve el OTRO peer (B) dentro del túnel, ya descifrado (primeras líneas):
+19:17:16.909139 IP 10.18.0.1 > 10.18.0.2: ICMP echo request, id 3, seq 1, length 64
+.....K.....<..j............8SECRET!LAB18SECRET!LAB18SECRET!LAB18SEC
+19:17:16.909174 IP 10.18.0.2 > 10.18.0.1: ICMP echo reply, id 3, seq 1, length 64
+.....S.....<..j............8SECRET!LAB18SECRET!LAB18SECRET!LAB18SEC
+19:17:17.932020 IP 10.18.0.1 > 10.18.0.2: ICMP echo request, id 3, seq 2, length 64
+.....l.....=..j.....6......8SECRET!LAB18SECRET!LAB18SECRET!LAB18SEC

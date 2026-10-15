@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laboratorio 18 - Signal y WireGuard</title>
+
+  <style>
+    :root {
+      --bg: #eef2ff;
+      --card: #ffffff;
+      --primary: #4f46e5;
+      --secondary: #7c3aed;
+      --dark: #111827;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #eef2ff, #fdf2f8);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 55px 30px;
+      text-align: center;
+    }
+
+    .hero h1 { margin: 0; font-size: 2.4rem; letter-spacing: -1px; }
+    .hero p { margin: 10px 0 0; font-size: 1.1rem; opacity: 0.95; }
+
+    .student {
+      margin-top: 20px;
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .container { max-width: 1100px; margin: -35px auto 50px; padding: 0 20px; }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 22px;
+      box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+      border: 1px solid var(--border);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #312e81;
+      font-size: 1.5rem;
+      border-left: 5px solid var(--primary);
+      padding-left: 12px;
+    }
+
+    h3 { color: #4338ca; margin-bottom: 8px; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+
+    .mini-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .mini-card strong { display: block; font-size: 1rem; margin-bottom: 6px; }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .ok { background: #dcfce7; color: #166534; }
+    .pending { background: #fef3c7; color: #92400e; }
+    .bad { background: #fee2e2; color: #991b1b; }
+
+    .table-wrap { overflow-x: auto; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { background: #f1f5f9; color: #312e81; }
+
+    code {
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      word-break: break-all;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 18px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    pre code { background: none; padding: 0; color: inherit; word-break: normal; }
+
+    a { color: var(--primary); }
+
+    img.evidence { max-width: 360px; width: 100%; border-radius: 12px; border: 1px solid var(--border); display: block; margin: 12px 0; }
+
+    .note {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 0.95rem;
+    }
+
+    .learned {
+      background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+      border: 1px solid #c7d2fe;
+      border-radius: 14px;
+      padding: 20px 24px;
+      font-size: 1.05rem;
+    }
+
+    footer { text-align: center; color: var(--muted); padding-bottom: 40px; font-size: 0.9rem; }
+  </style>
+</head>
+
+<body>
+  <header class="hero">
+    <h1>Laboratorio 18 - Signal y WireGuard</h1>
+    <p>Safety Number, qué sabe el servidor, un túnel cifrado y acceso excepcional</p>
+    <div class="student">Cynthia Santos · 20230493</div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Resumen del laboratorio</h2>
+      <p>
+        En este laboratorio se separaron tres propiedades que suelen confundirse: la <strong>confidencialidad del contenido</strong>
+        (Signal, de extremo a extremo), el <strong>cifrado del camino</strong> (un túnel WireGuard) y la <strong>metadata</strong>
+        (quién habla con quién, cuándo y cuánto). Se levantó un túnel WireGuard, se capturó y se comprobó qué ve la red y qué ve el otro
+        peer, se razonó qué sabe y qué no lee el servidor de Signal, y se escribió <a href="E2EE.md">E2EE.md</a>.
+      </p>
+      <p class="note">
+        <strong>Dicho tal cual fue:</strong> el túnel se hizo entre <strong>dos contenedores Docker</strong> en una misma computadora, no con un compañero ni con
+        un VPS. El <strong>Safety Number</strong> se verificó en Signal oficial con otra persona (Jona), y la captura tiene los números de teléfono tachados.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Estado de actividades</h2>
+      <div class="grid">
+        <div class="mini-card"><strong>Safety Number verificado</strong><span class="badge ok">Verificado (con Jona)</span></div>
+        <div class="mini-card"><strong>Tabla servidor-sabe / no-lee</strong><span class="badge ok">Completada</span></div>
+        <div class="mini-card"><strong>Túnel WireGuard</strong><span class="badge ok">Arriba (2 contenedores)</span></div>
+        <div class="mini-card"><strong>Captura UDP 51820</strong><span class="badge ok">Verificada</span></div>
+        <div class="mini-card"><strong>E2EE.md</strong><span class="badge ok">Completado</span></div>
+        <div class="mini-card"><strong>Sin private keys en el repo</strong><span class="badge ok">Verificado</span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Parte A: Safety Number</h2>
+      <p>
+        Signal oficial (Android), conversación con Jona: la conversación quedó <strong>marcada como verificada</strong>. En la pantalla se ven el QR y el número de
+        60 dígitos (parcialmente difuminados), el botón <em>Retirar marca de verificación</em>, que solo aparece cuando ya está verificada, y
+        <em>Verificación automática de claves: Cifrado verificado</em>. Teléfonos tachados.
+      </p>
+      <img class="evidence" src="evidence/safety-number-tachado.png" alt="Pantalla Verificar número de seguridad de Signal con la conversación con Jona marcada como verificada, teléfonos tachados" />
+      <p>
+        <strong>¿Qué ataque detectaría un Safety Number que no coincide?</strong> Un ataque de intermediario (MITM) o una sustitución de keys: X3DH no puede probar por sí solo
+        que la identity key del prekey bundle es la del contacto, y el Safety Number, derivado de las identity keys de ambos, delata si alguien se interpuso.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Parte B: qué sabe el servidor de Signal</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Dato</th><th>¿El servidor lo sabe?</th><th>Por qué</th></tr>
+          <tr><td>Texto del mensaje</td><td><span class="badge ok">No</span></td><td>E2EE: las keys del Double Ratchet solo están en los dispositivos de los extremos.</td></tr>
+          <tr><td>Que su cuenta existe</td><td><span class="badge bad">Sí</span></td><td>Se registra con un número de teléfono; Signal pudo entregar la fecha y hora de registro.</td></tr>
+          <tr><td>Cuándo se conectó</td><td><span class="badge bad">Sí</span></td><td>Signal pudo entregar la última fecha de conexión.</td></tr>
+          <tr><td>Tamaño aproximado</td><td><span class="badge bad">Sí, en tránsito</span></td><td>Transporta el mensaje cifrado; es inferencia de diseño, no un dato que Signal diga guardar.</td></tr>
+          <tr><td>Quién envió</td><td><span class="badge pending">Busca que no</span></td><td>Con sealed sender el remitente va dentro del sobre cifrado.</td></tr>
+          <tr><td>Su IP mientras está conectado</td><td><span class="badge bad">Sí, en tránsito</span></td><td>E2EE no esconde la IP de la conexión; eso lo resuelve Tor.</td></tr>
+          <tr><td>Contactos y grupos</td><td><span class="badge ok">No</span></td><td>Signal los cifra de extremo a extremo y dice no tener acceso a ellos.</td></tr>
+        </table>
+      </div>
+      <p>
+        <strong>Contraste con <a href="https://signal.org/bigbrother/" target="_blank" rel="noopener">signal.org/bigbrother</a>:</strong> lo que el servidor
+        <em>ve en tránsito</em> es más que lo que <em>guarda y puede entregar</em>. Ante órdenes judiciales, Signal dice haber podido producir solo la fecha y hora de registro de una
+        cuenta y su última conexión. Es la declaración del propio proveedor, no una auditoría independiente. Detalle en <a href="SIGNAL.md">SIGNAL.md</a>.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Túnel WireGuard</h2>
+      <p>
+        Dos contenedores (<code>172.21.0.2</code> y <code>172.21.0.3</code>), túnel <code>10.18.0.1</code> ↔ <code>10.18.0.2</code>, puerto UDP 51820.
+        <code>AllowedIPs</code> solo con la IP del otro peer (<code>/32</code>), sin full-tunnel. Las keys se generaron dentro de cada contenedor y nunca salieron de ahí.
+      </p>
+<pre><code>interface: wg0
+  public key: WR0ufKJn…
+  private key: (hidden)
+  listening port: 51820
+
+peer: Gky6+el9…
+  endpoint: 172.21.0.3:51820
+  allowed ips: 10.18.0.2/32
+  latest handshake: 10 seconds ago
+  transfer: 988 B received, 1.02 KiB sent</code></pre>
+<pre><code>$ ping -c 5 10.18.0.2
+5 packets transmitted, 5 received, 0% packet loss
+rtt min/avg/max/mdev = 0.441/0.666/0.784/0.117 ms</code></pre>
+
+      <h3>Lo que ve la red: captura del UDP 51820</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Tipo de mensaje</th><th>Bytes</th><th>Paquetes</th></tr>
+          <tr><td>Handshake Initiation</td><td>148</td><td>1</td></tr>
+          <tr><td>Handshake Response</td><td>92</td><td>1</td></tr>
+          <tr><td>Transport Data</td><td>128</td><td>12</td></tr>
+        </table>
+      </div>
+<pre><code>Transport Data (primeros 48 bytes):
+04 00 00 00 1d 91 8f 5a 00 00 00 00 00 00 00 00 59 63 44 94 91 24 fe c7
+d4 a4 e7 16 50 06 54 48 2b b3 0b 9e 25 d7 dc 66 c0 02 13 63 b1 e4 69 38
+
+Texto "LAB18SECRET" dentro de la captura de la red: NO aparece (el payload es ilegible)</code></pre>
+      <h3>Lo que ve el otro peer: dentro del túnel, ya descifrado</h3>
+<pre><code>IP 10.18.0.1 > 10.18.0.2: ICMP echo request, id 3, seq 1, length 64
+.....K.....&lt;..j............8SECRET!LAB18SECRET!LAB18SECRET!LAB18SEC</code></pre>
+      <p>
+        <strong>Mi ISP / la red ve</strong> paquetes UDP entre dos IPs por el puerto 51820, con sus tamaños, tiempos y volumen, pero no el contenido.
+        <strong>El otro peer del túnel ve</strong> los paquetes IP completos y descifrados, y vería los destinos si el tráfico saliera del túnel.
+        El túnel se bajó al terminar (<code>wg0</code> eliminado). Evidencia en <code>evidence/</code> y detalle en <a href="WIREGUARD.md">WIREGUARD.md</a>.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>E2EE.md en resumen</h2>
+      <ul>
+        <li><strong>Forward secrecy:</strong> si un teléfono se compromete a mitad del chat, los mensajes pasados siguen protegidos porque cada message key se borra tras usarse, salvo que el historial esté en texto plano en el teléfono.</li>
+        <li><strong>Post-compromise security:</strong> los mensajes futuros se recuperan en cuanto entra un Diffie-Hellman nuevo que el atacante no controla, siempre que no siga dentro del dispositivo.</li>
+        <li><strong>Acceso excepcional contra Signal:</strong> habría que forzar copias de keys que hoy se borran por diseño o agregar una key de acceso, y ocultar el Safety Number; el punto de acceso sería el dispositivo o el proveedor de la app. <em>Keys Under Doormats</em> (Abelson et al., 2015) sostiene que eso crea una vulnerabilidad que no es solo para los autorizados.</li>
+        <li><strong>Contra WireGuard:</strong> no hay proveedor ni servidor intermedio; el acceso estaría en los propios peers o en el operador del túnel.</li>
+        <li><strong>Tor, Signal y WireGuard:</strong> Tor esconde quién habla con quién, Signal esconde el contenido frente al servidor y WireGuard cifra el camino frente al ISP y la red local.</li>
+      </ul>
+      <p>Documento completo: <a href="E2EE.md">E2EE.md</a> (442 palabras).</p>
+    </section>
+
+    <section class="card">
+      <h2>Seguridad</h2>
+      <ul>
+        <li>Ninguna <code>PrivateKey</code> en el repo: el <code>.gitignore</code> excluye <code>privatekey</code>, <code>*.key</code> y <code>wg0.conf</code>, y el script verifica que no quede ninguna en <code>evidence/</code>.</li>
+        <li>Solo se capturó el tráfico del propio túnel de laboratorio; nada de terceros.</li>
+        <li>Signal solo desde el sitio oficial.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Lo que aprendimos</h2>
+      <p class="learned">
+        Aprendimos que cifrar el contenido no es esconder la conversación. En la captura de la red se ve quién habla con quién, el tamaño y los tiempos
+        de los paquetes, aunque no se pueda leer nada, y el otro extremo del túnel sí ve todo lo que sale. En Signal pasa algo parecido: el servidor no
+        lee los mensajes, pero sabe que la cuenta existe y cuándo se conecta. Por eso un mandato de acceso excepcional tendría que quitar la
+        forward secrecy, que borra las keys por diseño.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    Desarrollado por Cynthia Santos · 20230493 · CS031 Technology &amp; Freedom · Laboratorio 18
+  </footer>
+</body>
+</html>

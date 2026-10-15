@@ -1,0 +1,11 @@
+# Ejemplo de configuración. NO contiene keys reales.
+# Generar la private key localmente (wg genkey) y NUNCA subirla al repo.
+[Interface]
+PrivateKey = <GENERARLA-LOCALMENTE-Y-NO-SUBIRLA>
+Address = 10.18.0.1/24
+ListenPort = 51820
+
+[Peer]
+PublicKey = <PUBLIC-KEY-DEL-OTRO-PEER>
+AllowedIPs = 10.18.0.2/32
+Endpoint = <IP-DEL-OTRO-PEER>:51820

@@ -1,0 +1,11 @@
+# Nunca subir llaves ni configuraciones con llaves
+privatekey
+publickey
+*.key
+wg0.conf
+wg*.conf
+!wg0.conf.example
+.env
+.DS_Store
+__pycache__/
+*.pyc

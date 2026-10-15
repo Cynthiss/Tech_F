@@ -1,0 +1,10 @@
+interface: wg0
+  public key: Gky6+el9…
+  private key: (hidden)
+  listening port: 51820
+
+peer: WR0ufKJn…
+  endpoint: 172.21.0.2:51820
+  allowed ips: 10.18.0.1/32
+  latest handshake: 10 seconds ago
+  transfer: 1.02 KiB received, 988 B sent
