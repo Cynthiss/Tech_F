@@ -1,0 +1,11 @@
+== Publicación de la nota #2 (2026-10-22T04:24:20Z) ==
+--- relay.damus.io ---
+connecting to relay.damus.io... status 503
+failed to connect to any of the given relays.
+--- nos.lol ---
+connecting to nos.lol... ok.
+publishing to nos.lol... success.
+--- ws://127.0.0.1:8080 ---
+connecting to 127.0.0.1:8080... ok.
+publishing to ws://127.0.0.1:8080... failed: msg: blocked: pubkey is not allowed to publish to this relay
+failed to publish to any of the relays

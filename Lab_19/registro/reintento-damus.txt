@@ -1,0 +1,15 @@
+== Reintento a relay.damus.io (2026-10-22T04:24:34Z), con las mismas notas ya firmadas ==
+--- nota1 ---
+connecting to relay.damus.io... ok.
+publishing to relay.damus.io... success.
+--- nota2 ---
+connecting to relay.damus.io... status 503
+failed to connect to any of the given relays.
+== pedida de vuelta ==
+--- nota1 ---
+  connecting to relay.damus.io... ok.
+  DEVUELTA: CS031 Lab 19 · nota de prueba
+--- nota2 ---
+  connecting to relay.damus.io... status 503
+  failed to connect to any of the given relays.
+  (no devolvió la nota)

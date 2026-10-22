@@ -1,0 +1,13 @@
+== Pedida de vuelta (nak req -i) ==
+--- relay.damus.io ---
+  connecting to relay.damus.io... ok.
+  (no devolvió la nota)
+--- nos.lol ---
+  connecting to nos.lol... ok.
+  DEVUELTA: id 569f0ad921173dd8… | contenido: CS031 Lab 19 · nota de prueba
+--- nostr.wine ---
+  connecting to nostr.wine... ok.
+  (no devolvió la nota)
+--- ws://127.0.0.1:8080 ---
+  connecting to 127.0.0.1:8080... ok.
+  DEVUELTA: id 569f0ad921173dd8… | contenido: CS031 Lab 19 · nota de prueba

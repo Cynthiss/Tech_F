@@ -1,0 +1,4 @@
+npub de test: npub1xs4cndsw97x8qnzspu7tv6revfpjrc5m8wfhqs943wfxkyga3puq9f60ew
+relay propio arriba en ws://127.0.0.1:8080 (whitelist: solo la llave de test)
+id de la nota 1: 569f0ad921173dd8aacac34026152b021a6f01fae20be1069698eceae3b8b57f
+id de la nota 2: 4fb6d75969c9c4c37e86d47151abc33d6fde7fbddd51bfc357a935e45dfcff7b

@@ -1,0 +1,6 @@
+== verify del original ==
+código de salida: 0
+
+== verify de la copia con una letra cambiada ==
+invalid .id, expected id::af57c0f25bb3659a6e09fbaf78dd63085ddcef8ddb0d4904969120e827f9feca, got id::569f0ad921173dd8aacac34026152b021a6f01fae20be1069698eceae3b8b57f
+código de salida: 123

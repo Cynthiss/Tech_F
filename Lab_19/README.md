@@ -8,11 +8,13 @@ Firmar una nota con una llave de test, comprobar la firma (y ver que falla si se
 
 | Parte | Estado |
 |---|---|
-| `nak` instalado desde el repositorio oficial (Homebrew, versión 0.21.2) | Hecho |
-| Ensayo de firmar y comprobar sin internet (original válido, copia alterada inválida) | Hecho, con una llave **de ensayo** (no es la de la entrega) |
-| Llave de test de la clase, nota 1, publicar en 4 relays, pedirla de vuelta | **En clase** |
-| El ban y la nota #2 | **En clase** |
-| Entrega en el carnet ([ENTREGA.md](ENTREGA.md)) | **En clase,** con los datos reales |
+| `nak` instalado desde el repositorio oficial (Homebrew, 0.21.2) | Hecho |
+| Firmar y comprobar sin internet (original válido, copia alterada inválida) | Hecho |
+| Nota 1 en 4 relays y pedida de vuelta | Hecho, con respuestas reales |
+| El ban y la nota #2 | Hecho |
+| Entrega ([ENTREGA.md](ENTREGA.md)) | Lista |
+
+**Cómo se hizo:** con permiso para usar otros relays, el "relay de clase" fue un **relay propio** (`nostr-rs-relay` en Docker) y el **ban lo hicimos nosotros** quitando la llave de `pubkey_whitelist`. Todo se corre con `PUBLICAR=si bash scripts/ejecutar-lab19.sh`, que deja los registros en `registro/`. **No lo vuelvas a correr:** publica 2 notas en relays públicos y el lab permite máximo 2.
 
 ## Límites (no negociables)
 

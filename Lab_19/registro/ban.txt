@@ -1,0 +1,1 @@
+BAN aplicado (2026-10-22T04:24:20Z): la llave de test salió de la whitelist del relay propio

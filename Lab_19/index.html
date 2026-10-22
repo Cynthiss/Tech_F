@@ -151,13 +151,13 @@
     <section class="card">
       <h2>Resumen del laboratorio</h2>
       <p>
-        En este laboratorio se firma una nota con una <strong>llave de test</strong>, se comprueba su firma (y se ve que falla si se altera una letra), se publica la misma
-        nota en <strong>4 relays</strong> y se observa qué pasa cuando un relay la rechaza y cuando el relay de clase <strong>banea</strong> la llave.
-        La idea de fondo: en Nostr la identidad es una llave, cada nota va firmada y ningún relay puede falsificarla ni editarla, pero cada relay decide qué guarda.
+        En este laboratorio se firmó una nota con una <strong>llave de test</strong>, se comprobó su firma (y se vio que falla si se altera una letra), se publicó la misma nota en
+        <strong>4 relays</strong> y se observó qué pasa cuando un relay la rechaza y cuando el operador de un relay <strong>banea</strong> la llave. La idea de fondo: en Nostr la identidad es una llave,
+        cada nota va firmada y ningún relay puede falsificarla ni editarla, pero cada relay decide qué guarda.
       </p>
       <p class="note">
-        <strong>Estado:</strong> el lab se hace y se entrega <strong>en clase</strong>. Está lista la preparación (herramienta instalada y comandos ensayados). La <strong>tabla de relays</strong> y la
-        <strong>evidencia del ban</strong> necesitan el relay de clase y se llenan con respuestas reales durante la clase; por eso aparecen como pendientes.
+        <strong>Dicho tal cual fue:</strong> se usaron los relays públicos <code>relay.damus.io</code>, <code>nos.lol</code> y <code>nostr.wine</code>. Como se permitió usar otros relays, el "relay de clase" fue un
+        <strong>relay propio</strong> (<code>nostr-rs-relay</code> en Docker) y el <strong>ban lo hice yo como operador</strong>, quitando la llave de la lista de autores permitidos. Todas las respuestas son reales.
       </p>
     </section>
 
@@ -165,72 +165,86 @@
       <h2>Estado de actividades</h2>
       <div class="grid">
         <div class="mini-card"><strong>nak instalado (repositorio oficial)</strong><span class="badge ok">v0.21.2</span></div>
-        <div class="mini-card"><strong>Firmar y comprobar sin internet</strong><span class="badge ok">Ensayado</span></div>
-        <div class="mini-card"><strong>Publicar en 4 relays</strong><span class="badge pending">En clase</span></div>
-        <div class="mini-card"><strong>Tabla de relays con respuestas reales</strong><span class="badge pending">En clase</span></div>
-        <div class="mini-card"><strong>El ban y la nota #2</strong><span class="badge pending">En clase</span></div>
+        <div class="mini-card"><strong>Firmar y comprobar sin internet</strong><span class="badge ok">Completado</span></div>
+        <div class="mini-card"><strong>Publicar en 4 relays y pedirla de vuelta</strong><span class="badge ok">Completado</span></div>
+        <div class="mini-card"><strong>Tabla de relays con respuestas reales</strong><span class="badge ok">Completada</span></div>
+        <div class="mini-card"><strong>El ban y la nota #2</strong><span class="badge ok">Completado</span></div>
         <div class="mini-card"><strong>Sin nsec en el repo</strong><span class="badge ok">Verificado</span></div>
       </div>
     </section>
 
     <section class="card">
-      <h2>Comprobación de firma (ensayo previo)</h2>
-      <p>Con una llave de ensayo, distinta a la de la entrega, y sin publicar nada:</p>
+      <h2>Identidad de test y notas</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>npub de test</th><td><code>npub1xs4cndsw97x8qnzspu7tv6revfpjrc5m8wfhqs943wfxkyga3puq9f60ew</code></td></tr>
+          <tr><th>id de la nota 1</th><td><code>569f0ad921173dd8aacac34026152b021a6f01fae20be1069698eceae3b8b57f</code></td></tr>
+          <tr><th>id de la nota #2</th><td><code>4fb6d75969c9c4c37e86d47151abc33d6fde7fbddd51bfc357a935e45dfcff7b</code></td></tr>
+          <tr><th>Contenido</th><td><em>CS031 Lab 19 · nota de prueba</em> (y <em>#2</em>) con la etiqueta <code>t=cs031lab19</code></td></tr>
+        </table>
+      </div>
+      <p>La llave privada se generó en memoria, nunca se imprimió ni se guardó, y se descartó al terminar.</p>
+    </section>
+
+    <section class="card">
+      <h2>Comprobación de firma</h2>
       <div class="table-wrap">
         <table>
           <tr><th>Prueba</th><th>Resultado</th></tr>
-          <tr><td><code>cat nota1.json | nak verify</code> (original)</td><td><span class="badge ok">Válida</span> sin error, código de salida 0</td></tr>
-          <tr><td><code>cat nota1-alterada.json | nak verify</code> (una letra cambiada)</td><td><span class="badge bad">Inválida</span> <code>invalid .id, expected id::ae1a9d83…, got id::0ae09ba6…</code></td></tr>
+          <tr><td>Nota original (<code>nak verify</code>)</td><td><span class="badge ok">Válida</span> código de salida 0</td></tr>
+          <tr><td>Copia con una letra cambiada</td><td><span class="badge bad">Inválida</span> <code>invalid .id, expected id::af57c0f2…, got id::569f0ad9…</code></td></tr>
         </table>
       </div>
       <p>
-        <strong>Por qué falla:</strong> el <code>id</code> es la huella (SHA-256) del evento. Al cambiar una letra del texto, la huella que se recalcula es otra y ya no coincide con
-        el <code>id</code> firmado, así que la firma deja de cuadrar y la nota se descarta. Por eso un relay puede no entregar una nota, pero no puede editarla sin que se note.
+        <strong>Por qué:</strong> el <code>id</code> es la huella (SHA-256) del evento. Al cambiar una letra, la huella cambia y la firma ya no cuadra con ella. Por eso un relay puede no entregar una nota,
+        pero no puede editarla sin que se note. Detalle en <a href="registro/verificacion.txt">registro/verificacion.txt</a>.
       </p>
     </section>
 
     <section class="card">
-      <h2>Qué se hace en clase</h2>
-      <div class="grid">
-        <div class="mini-card"><strong>1. Llave de test</strong><code>nak key generate</code> y anotar el npub.</div>
-        <div class="mini-card"><strong>2. Firmar y comprobar</strong>Nota 1 con la etiqueta <code>t=cs031lab19</code>; verificar original y copia alterada.</div>
-        <div class="mini-card"><strong>3. Publicar</strong>En relay.damus.io, nos.lol, nostr.wine y el relay de clase; pedirla de vuelta con <code>nak req -i</code>.</div>
-        <div class="mini-card"><strong>4. El ban</strong>El instructor banea las llaves de test en el relay de clase; publicar la nota #2.</div>
-        <div class="mini-card"><strong>5. Entregar</strong>npub e id, tabla de relays, comprobación de firma y reflexión de 3 líneas. Nunca la nsec.</div>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>Tabla de relays (se llena en clase)</h2>
+      <h2>Tabla de relays (respuestas reales)</h2>
       <div class="table-wrap">
         <table>
           <tr><th>Relay</th><th>¿Aceptó la nota 1?</th><th>¿La devolvió?</th><th>¿Aceptó la #2 tras el ban?</th></tr>
-          <tr><td>relay.damus.io</td><td><span class="badge pending">Pendiente</span></td><td><span class="badge pending">Pendiente</span></td><td><span class="badge pending">Pendiente</span></td></tr>
-          <tr><td>nos.lol</td><td><span class="badge pending">Pendiente</span></td><td><span class="badge pending">Pendiente</span></td><td><span class="badge pending">Pendiente</span></td></tr>
-          <tr><td>nostr.wine (de pago)</td><td><span class="badge pending">Pendiente</span> (debe rechazarla)</td><td><span class="badge pending">Pendiente</span></td><td>No se publica ahí</td></tr>
-          <tr><td>Relay de clase</td><td><span class="badge pending">Pendiente</span></td><td><span class="badge pending">Pendiente</span></td><td><span class="badge pending">Pendiente</span></td></tr>
+          <tr><td>relay.damus.io</td><td>1.er intento: <code>status 503</code> (no conectó). Reintento: <code>success</code></td><td><span class="badge ok">Sí</span> (tras el reintento)</td><td><span class="badge bad">No</span> <code>status 503</code> en los dos intentos</td></tr>
+          <tr><td>nos.lol</td><td><code>success</code></td><td><span class="badge ok">Sí</span></td><td><span class="badge ok">Sí</span> <code>success</code>, y la devolvió</td></tr>
+          <tr><td>nostr.wine (de pago)</td><td><code>restricted: sign up at https://nostr.wine to write events to this relay</code></td><td><span class="badge bad">No</span></td><td>— (no se publica ahí)</td></tr>
+          <tr><td>Relay de clase (propio)</td><td><code>success</code></td><td><span class="badge ok">Sí</span></td><td><span class="badge bad">No</span> <code>blocked: pubkey is not allowed to publish to this relay</code></td></tr>
         </table>
       </div>
-      <p>Las respuestas se copian tal cual las devuelven los relays; no se completan ni se estiman. Plantilla en <a href="ENTREGA.md">ENTREGA.md</a>.</p>
+      <p>
+        Respuestas completas en <a href="registro/respuestas-nota1.txt">respuestas-nota1</a>, <a href="registro/devuelta-nota1.txt">devuelta-nota1</a>, <a href="registro/respuestas-nota2.txt">respuestas-nota2</a>,
+        <a href="registro/devuelta-nota2.txt">devuelta-nota2</a> y <a href="registro/reintento-damus.txt">reintento-damus</a>. Pagar no fue necesario: <code>nostr.wine</code> debía rechazar la nota.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>El ban</h2>
+      <p>
+        El relay propio solo aceptaba a la llave de test (<code>pubkey_whitelist</code>). Después de publicar la nota 1, quité la llave de esa lista y reinicié el relay, lo que equivale a un ban
+        (<a href="registro/ban.txt">registro/ban.txt</a>). La nota #2 fue rechazada con <code>blocked: pubkey is not allowed to publish to this relay</code>, pero <strong>quedó en nos.lol</strong>:
+        el ban afectó a un relay, no a la nota ni a la identidad.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Reflexión</h2>
+      <ol>
+        <li>Mi nota quedó en 3 de 4 relays (nos.lol, relay.damus.io tras un reintento y mi relay propio); nostr.wine la rechazó con <code>restricted: sign up at https://nostr.wine to write events to this relay</code>.</li>
+        <li>El ban me quitó poder publicar en mi relay propio, pero no la nota #2 en nos.lol ni mi npub: sigo siendo la misma llave y los demás relays siguen aceptándome.</li>
+        <li>Si mi venture tuviera una cuenta Nostr, la nsec la guardaría en un firmador remoto (NIP-46) a cargo de una sola persona responsable, porque así ninguna app ve la llave y hay alguien claro que la cuida.</li>
+      </ol>
     </section>
 
     <section class="card">
       <h2>Higiene y límites</h2>
       <ul>
-        <li>Solo llaves de test generadas en clase; <strong>nunca</strong> una nsec en el repo, el chat o una captura. El <code>.gitignore</code> la excluye y <code>scripts/revisar-secretos.sh</code> la detecta antes de entregar.</li>
-        <li>Máximo 2 notas por persona en relays públicos, con el contenido fijo <em>CS031 Lab 19 · nota de prueba</em> (y <em>#2</em>) y la etiqueta <code>t=cs031lab19</code>.</li>
-        <li>Sin scraping, sin pagar nada y sin evadir bans fuera del relay de clase.</li>
+        <li>npub sí, nsec nunca: el <code>.gitignore</code> la excluye y <code>scripts/revisar-secretos.sh</code> comprobó que no hay ninguna en el repo.</li>
+        <li>2 notas en relays públicos con el contenido fijo: la nota 1 (en nos.lol y relay.damus.io) y la #2 (en nos.lol). Sin pagar nada, sin scraping.</li>
       </ul>
-      <p>Guía completa: <a href="README.md">README.md</a>.</p>
+      <p>Guía y comandos: <a href="README.md">README.md</a> · Entrega: <a href="ENTREGA.md">ENTREGA.md</a>.</p>
     </section>
 
-    <section class="card">
-      <h2>Lo que aprendimos (hasta ahora)</h2>
-      <p class="learned">
-        Aprendimos que en Nostr una nota va firmada con una llave, y que cambiar una sola letra rompe la firma porque cambia la huella (el id). Por eso un relay
-        puede dejar de entregar una nota, pero no puede falsificarla ni editarla. Falta ver, con los relays reales, quién la rechaza y qué sobrevive al ban.
-      </p>
-    </section>
   </main>
 
   <footer>

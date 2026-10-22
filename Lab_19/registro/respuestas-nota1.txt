@@ -1,0 +1,14 @@
+== Publicación de la nota 1 (2026-10-22T04:24:12Z) ==
+--- relay.damus.io ---
+connecting to relay.damus.io... status 503
+failed to connect to any of the given relays.
+--- nos.lol ---
+connecting to nos.lol... ok.
+publishing to nos.lol... success.
+--- nostr.wine ---
+connecting to nostr.wine... ok.
+publishing to nostr.wine... failed: msg: restricted: sign up at https://nostr.wine to write events to this relay
+failed to publish to any of the relays
+--- ws://127.0.0.1:8080 ---
+connecting to 127.0.0.1:8080... ok.
+publishing to ws://127.0.0.1:8080... success.

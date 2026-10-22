@@ -1,0 +1,10 @@
+== Nota #2 pedida de vuelta ==
+--- relay.damus.io ---
+  connecting to relay.damus.io... ok.
+  (no devolvió la nota)
+--- nos.lol ---
+  connecting to nos.lol... ok.
+  DEVUELTA: id 4fb6d75969c9c4c3… | contenido: CS031 Lab 19 · nota de prueba #2
+--- ws://127.0.0.1:8080 ---
+  connecting to 127.0.0.1:8080... ok.
+  (no devolvió la nota)
