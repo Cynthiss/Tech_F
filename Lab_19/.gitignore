@@ -1,0 +1,7 @@
+# NUNCA subir una nsec (ni la de test)
+*.nsec
+nsec*
+.env
+.env.*
+*secret*
+.DS_Store

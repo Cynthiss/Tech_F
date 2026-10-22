@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laboratorio 20 - Global Chess Passport</title>
+
+  <style>
+    :root {
+      --bg: #eef2ff;
+      --card: #ffffff;
+      --primary: #4f46e5;
+      --secondary: #7c3aed;
+      --dark: #111827;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #eef2ff, #fdf2f8);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 55px 30px;
+      text-align: center;
+    }
+
+    .hero h1 { margin: 0; font-size: 2.4rem; letter-spacing: -1px; }
+    .hero p { margin: 10px 0 0; font-size: 1.1rem; opacity: 0.95; }
+
+    .student {
+      margin-top: 20px;
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .container { max-width: 1100px; margin: -35px auto 50px; padding: 0 20px; }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 22px;
+      box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+      border: 1px solid var(--border);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #312e81;
+      font-size: 1.5rem;
+      border-left: 5px solid var(--primary);
+      padding-left: 12px;
+    }
+
+    h3 { color: #4338ca; margin-bottom: 8px; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+
+    .mini-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .mini-card strong { display: block; font-size: 1rem; margin-bottom: 6px; }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .ok { background: #dcfce7; color: #166534; }
+    .pending { background: #fef3c7; color: #92400e; }
+    .bad { background: #fee2e2; color: #991b1b; }
+
+    .table-wrap { overflow-x: auto; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { background: #f1f5f9; color: #312e81; }
+
+    code {
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      word-break: break-all;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 18px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    pre code { background: none; padding: 0; color: inherit; word-break: normal; }
+
+    a { color: var(--primary); }
+
+    img.evidence { max-width: 360px; width: 100%; border-radius: 12px; border: 1px solid var(--border); display: block; margin: 12px 0; }
+
+    .note {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 0.95rem;
+    }
+
+    .learned {
+      background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+      border: 1px solid #c7d2fe;
+      border-radius: 14px;
+      padding: 20px 24px;
+      font-size: 1.05rem;
+    }
+
+    footer { text-align: center; color: var(--muted); padding-bottom: 40px; font-size: 0.9rem; }
+  </style>
+</head>
+
+<body>
+  <header class="hero">
+    <h1>Laboratorio 20 - Global Chess Passport</h1>
+    <p>Un caso real de DID y credenciales verificables: Algorand + World Chess</p>
+    <div class="student">Cynthia Santos · 20230493</div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Resumen del laboratorio</h2>
+      <p>
+        En este laboratorio se analiza una <strong>propuesta real</strong>, el Global Chess Passport de la Algorand Foundation y World Chess, con el vocabulario de la sesión:
+        <strong>DID</strong>, <strong>credencial verificable</strong>, <strong>emisor</strong>, <strong>holder</strong>, <strong>verificador</strong>, <strong>revocación</strong> y
+        <strong>divulgación selectiva</strong>. El objetivo es separar lo que está documentado (<em>hecho</em>, con fuente) de lo que solo se promete.
+      </p>
+      <p>
+        Mi lectura en pocas palabras: el pasaporte es todavía una idea con una demostración, no un producto. Cada jugador tendría su propia identidad digital (una DID) y guardaría
+        credenciales firmadas por quien sabe algo de él, como su rating o si hizo trampa, y las presentaría a otra plataforma sin que el emisor participe cada vez.
+        Lo importante, como la revocación o cuánto dato se oculta, casi todo está sin definir.
+      </p>
+      <p class="note">
+        El lab es <strong>individual</strong>, sin código y sin datos personales reales. Cada dato sobre el caso lleva su fuente, y donde las fuentes no dicen algo, aparece como <strong>"no se sabe"</strong>.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Estado de actividades</h2>
+      <div class="grid">
+        <div class="mini-card"><strong>Hecho vs promesa (estado real)</strong><span class="badge ok">Completado</span></div>
+        <div class="mini-card"><strong>Triángulo emisor, holder, verificador</strong><span class="badge ok">Completado</span></div>
+        <div class="mini-card"><strong>Tabla de quién ve qué</strong><span class="badge ok">Completada</span></div>
+        <div class="mini-card"><strong>Divulgación selectiva, revocación, correlación</strong><span class="badge ok">Completado</span></div>
+        <div class="mini-card"><strong>Qué se rompe + cambio de diseño</strong><span class="badge ok">Completado</span></div>
+        <div class="mini-card"><strong>Fuentes citadas</strong><span class="badge ok">4 fuentes</span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Estado real: hecho vs promesa</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Tipo</th><th>Qué dicen las fuentes</th><th>Fuente</th></tr>
+          <tr><td><span class="badge ok">Hecho</span></td><td>Algorand y World Chess publicaron la propuesta (nota de prensa del 24 abr 2025). El whitepaper dice que el sistema está <code>"currently in development on a small scale to test its feasibility"</code>.</td><td><a href="https://algorand.co/hubfs/Website-2024/PDFs/Algorand-Whitepaper-Identity%20and%20Verifiable%20Credential%20System%20for%20Chess-4.pdf" target="_blank" rel="noopener">Whitepaper</a></td></tr>
+          <tr><td><span class="badge ok">Hecho</span></td><td>El repo de demostración usa datos de ejemplo: <code>"placeholder data and UI components as a mock"</code>.</td><td><a href="https://github.com/algorandfoundation/chess-passport" target="_blank" rel="noopener">Repo de demostración</a></td></tr>
+          <tr><td><span class="badge pending">Promesa</span></td><td>El pasaporte global es algo "upcoming": World Chess <code>"plans to launch"</code> el pasaporte. En las fuentes que leí no hay fecha de lanzamiento.</td><td><a href="https://algorand.co/blog/algorand-and-world-chess-renewed-strategic-partnership-features-an-innovative-web3-business-model" target="_blank" rel="noopener">Renovación de la alianza (oct 2025)</a></td></tr>
+          <tr><td><span class="badge bad">No se sabe</span></td><td>En las fuentes que leí no hay cifras de usuarios ni adopción de la FIDE.</td><td>Las fuentes de arriba</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Sección 1: Triángulo</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Credencial</th><th>Emisor</th><th>Holder</th><th>Verificador</th></tr>
+          <tr><td>"Rating ≥ 2000"</td><td>La plataforma u organización que lleva el rating</td><td>El jugador, en su billetera</td><td>Otra plataforma u organizador de torneo</td></tr>
+          <tr><td>"Buena conducta"</td><td>La plataforma que detecta y sanciona la trampa</td><td>El jugador</td><td>Otra plataforma u organizador de torneo</td></tr>
+        </table>
+      </div>
+      <p>
+        El emisor firma, el holder guarda y el verificador comprueba (§4.5). El <a href="https://algorand.co/hubfs/Website-2024/PDFs/Algorand-Whitepaper-Identity%20and%20Verifiable%20Credential%20System%20for%20Chess-4.pdf" target="_blank" rel="noopener">whitepaper</a> dice que el emisor <code>"could be"</code> World Chess, Chess.com, Lichess o la FIDE:
+        son posibles, no hay ninguno comprometido. "Buena conducta" me parece más un estado que se puede quitar que un dato fijo; eso es interpretación mía.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Sección 2: Quién ve qué</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Actor</th><th>¿Qué ve?</th><th>¿Qué no ve?</th><th>Fuente</th></tr>
+          <tr><td>Emisor (ej. World Chess)</td><td>Los datos que él mismo firmó</td><td>Dónde ni a quién se presenta la credencial (§4.10), si la revocación se consulta de forma que no lo delate</td><td>No se especifica cómo se consulta</td></tr>
+          <tr><td>Jugador (holder)</td><td>Todo: sus credenciales y sus llaves</td><td>Nada</td><td>Whitepaper: la frase de 24 palabras respalda sus llaves</td></tr>
+          <tr><td>Verificador (otra plataforma o torneo)</td><td>Lo que el jugador le muestre, más su DID, el emisor y la firma</td><td>Lo que el jugador no revele, si hay divulgación selectiva</td><td>Whitepaper (la divulgación es solo un deseo)</td></tr>
+          <tr><td>Cadena pública (Algorand)</td><td>Un registro de metadatos o pruebas; la DID "anclada"</td><td>Los datos personales, que van fuera de la cadena</td><td>Whitepaper y <a href="https://algorand.co/blog/why-im-excited-about-a-decentralized-identity-system-for-chess" target="_blank" rel="noopener">blog de Bruno Martins</a></td></tr>
+          <tr><td>Quien roba la frase de 24 palabras</td><td>Todo lo que ve el jugador, y puede firmar como él</td><td>Nada</td><td>Whitepaper: con la frase se recuperan las llaves y el acceso a identificadores y credenciales</td></tr>
+        </table>
+      </div>
+      <p>
+        Lo que queda fuera de la cadena son los datos personales: el whitepaper habla de <code>"storing personal information off-chain"</code>. Qué va exactamente en la cadena no se sabe,
+        solo que hay un registro de metadatos o pruebas.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Sección 3: Divulgación selectiva, revocación y correlación</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Pregunta</th><th>Sí / No / No se sabe</th><th>Cita de la fuente</th><th>Concepto de §4</th></tr>
+          <tr><td>¿Pueden mostrar solo un dato (ej. el título) y ocultar el resto?</td><td><span class="badge pending">No se sabe</span></td><td><code>"Tools like Zero Knowledge Proofs or selective disclosure techniques should be used where possible"</code> (whitepaper)</td><td>§4.7</td></tr>
+          <tr><td>¿Quién puede revocar, y cómo se entera el verificador?</td><td><span class="badge pending">Se puede revocar, pero no se sabe cómo</span></td><td><code>"their credentials can be revoked in a transparent manner"</code> (whitepaper)</td><td>§4.9</td></tr>
+          <tr><td>¿Dos plataformas pueden unir su historial?</td><td><span class="badge bad">Sí, si se usa una sola DID</span></td><td><code>"A user could decide to have multiple DIDs, and choose which one to use"</code> (whitepaper)</td><td>§4.10 / D7</td></tr>
+        </table>
+      </div>
+      <p>
+        En divulgación selectiva el texto dice "should", así que es un deseo y no nombra ningún formato. En revocación <strong>el mecanismo no está especificado</strong>: no dice si hay lista de estado, ni dónde,
+        ni cómo la consulta un verificador. En correlación, con una sola DID en todas las plataformas se puede unir el historial; el whitepaper permite varias DIDs, pero el blog habla de una sola identidad,
+        así que no sé cuál sería la normal.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Secciones 4 y 5: Qué se rompe y un cambio de diseño</h2>
+      <h3>Falla 1: un emisor revoca por error</h3>
+      <p>
+        Un emisor revoca por error o por un baneo injusto. Como la idea es que la reputación viaje entre plataformas, al jugador lo marcarían en varios lugares a la vez. El whitepaper pide apelación y
+        <code>"transparent criteria for credential reinstatement"</code>, pero no dice quién decide ni en cuánto tiempo.
+      </p>
+      <h3>Falla 2: la frase de 24 palabras se pierde o se roba</h3>
+      <p>
+        Si el jugador la pierde sin respaldo, no podría recuperar su identidad (inferencia mía, el texto habla de <code>"backup and recover"</code>). Si se la roban, alguien puede presentarse como él
+        hasta que un emisor revoque (§4.10).
+      </p>
+      <h3>Un cambio de diseño</h3>
+      <p>
+        Que la revocación no sea global: cada emisor publica su propia lista de estado (§4.9) con un proceso de apelación escrito, y cada verificador decide a cuáles hace caso. Así un error de un emisor no se
+        vuelve un castigo en todos lados. Ataca la falla 1.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Fuentes</h2>
+      <ul>
+        <li><a href="https://algorand.co/hubfs/Website-2024/PDFs/Algorand-Whitepaper-Identity%20and%20Verifiable%20Credential%20System%20for%20Chess-4.pdf" target="_blank" rel="noopener">Whitepaper: identidad digital y credenciales verificables para el ajedrez</a></li>
+        <li><a href="https://algorand.co/blog/why-im-excited-about-a-decentralized-identity-system-for-chess" target="_blank" rel="noopener">Blog de Bruno Martins, Algorand Foundation</a></li>
+        <li><a href="https://algorand.co/blog/algorand-and-world-chess-renewed-strategic-partnership-features-an-innovative-web3-business-model" target="_blank" rel="noopener">Renovación de la alianza Algorand + World Chess (oct 2025)</a></li>
+        <li><a href="https://github.com/algorandfoundation/chess-passport" target="_blank" rel="noopener">Repo de demostración (chess-passport)</a></li>
+        <li><a href="https://algorand.co/universal-chess-passport" target="_blank" rel="noopener">Página del caso (Algorand)</a></li>
+      </ul>
+      <p>Notas de verificación de cada fuente, con las frases y lo que no dicen: <a href="FUENTES.md">FUENTES.md</a> · Reporte completo: <a href="REPORTE.md">REPORTE.md</a>.</p>
+    </section>
+
+    <section class="card">
+      <h2>Reglas del lab</h2>
+      <ul>
+        <li>Cero datos personales reales (DPI, CUI, fecha de nacimiento, fotos, correos, ratings o cuentas reales).</li>
+        <li>Toda afirmación sobre el caso lleva su fuente; no se inventa ningún dato.</li>
+        <li>No se crean cuentas, no se instala la app de demo y no se escribe a las empresas.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>
+    Desarrollado por Cynthia Santos · 20230493 · CS031 Technology &amp; Freedom · Laboratorio 20
+  </footer>
+</body>
+</html>
