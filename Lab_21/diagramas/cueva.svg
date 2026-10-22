@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 476" role="img" font-family="Segoe UI, Arial, sans-serif"><rect width="680" height="476" fill="#ffffff"/>
+<title>La cueva: un anillo con dos caminos A y B y una puerta al fondo</title><text x="340" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#312e81">La cueva (para dibujar en la hoja)</text><g transform="translate(0,34)">
+
+<path d="M340,320 A120,120 0 0 1 340,80" fill="none" stroke="#bfdbfe" stroke-width="44"/>
+<path d="M340,320 A120,120 0 0 0 340,80" fill="none" stroke="#fde68a" stroke-width="44"/>
+<path d="M340,320 A120,120 0 0 1 340,80" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="6 6"/>
+<path d="M340,320 A120,120 0 0 0 340,80" fill="none" stroke="#b45309" stroke-width="2" stroke-dasharray="6 6"/>
+<rect x="322" y="320" width="36" height="62" fill="#e5e7eb"/>
+<rect x="333" y="52" width="14" height="56" rx="3" fill="#374151"/>
+<circle cx="340" cy="80" r="11" fill="#fbbf24" stroke="#374151" stroke-width="2"/>
+<text x="340" y="24" text-anchor="middle" font-size="15" font-weight="700" fill="#374151">Puerta del fondo</text>
+<text x="340" y="40" text-anchor="middle" font-size="12" fill="#6b7280">solo abre con la palabra</text>
+<text x="205" y="212" text-anchor="middle" font-size="40" font-weight="700" fill="#2563eb">A</text>
+<text x="475" y="212" text-anchor="middle" font-size="40" font-weight="700" fill="#b45309">B</text>
+<text x="340" y="205" text-anchor="middle" font-size="16" fill="#6b7280">cueva</text>
+<text x="340" y="400" text-anchor="middle" font-size="15" font-weight="700" fill="#374151">Entrada</text>
+<circle cx="340" cy="345" r="15" fill="#2563eb"/><text x="340" y="351" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">P</text>
+<circle cx="560" cy="380" r="17" fill="#16a34a"/><text x="560" y="386" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">V</text>
+<text x="560" y="412" text-anchor="middle" font-size="13" fill="#374151">Verificador: espera afuera,</text>
+<text x="560" y="428" text-anchor="middle" font-size="13" fill="#374151">no ve por dónde entró P</text>
+<text x="120" y="385" text-anchor="middle" font-size="13" fill="#2563eb" font-weight="700">P = probador (azul)</text>
+<text x="120" y="403" text-anchor="middle" font-size="13" fill="#374151">entra por A o por B</text>
+</g></svg>
