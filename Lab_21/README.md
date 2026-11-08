@@ -29,11 +29,14 @@ Dos partes: (1) sentir con una moneda por qué repetir retos vuelve casi imposib
 
 | Archivo | Para qué |
 |---|---|
+| [FICHAS.md](FICHAS.md) | Las 7 filas preparadas de los **4 casos** (UE, Zcash, World ID, zk-rollup), con fuente y "no verificado" donde corresponde |
 | [PLANTILLA.md](PLANTILLA.md) | La tabla de rondas (A.1), la ficha de caso de 7 filas (A.2) y la reflexión, en blanco, para copiar a mano |
 | [REFERENCIA.md](REFERENCIA.md) | La tabla de ½ⁿ ya calculada y el vocabulario general de ZK |
 | `diagramas/` | 4 diagramas en SVG: [la cueva](diagramas/cueva.svg), [una ronda](diagramas/ronda.svg), [½ⁿ](diagramas/probabilidad.svg) y [dónde queda la confianza](diagramas/confianza.svg) |
+| [tabla-rondas-simulada.svg](diagramas/tabla-rondas-simulada.svg) | La tabla de rondas llena con la simulación (marcada como SIMULACIÓN) |
+| `simulacion/` | Simulación por computadora de la cueva (complemento, **no** reemplaza la actividad en papel) |
 | `index.html` | Página del lab (estado) |
 
 ## Lo que falta
 
-Todo lo que ocurre en clase: la cueva con la moneda, las anotaciones reales, el caso asignado y las fotos. Cuando te asignen el caso, pásame el texto de §4 y §9 del session doc y te preparo una hoja de **hechos verificados con su fuente** para esa ficha, como la de `FUENTES.md` del Lab 20.
+Entregar en el carnet bajo `## LAB # 21`. Las fotos ya están en `evidence/` y en el `index.html`. Si quieres reemplazarlas por versiones corregidas: en la tabla, la fila C debe decir 1 y la D un guion o 10/10 en la columna Cayó en la ronda, faltan las dos preguntas y la palabra SIMULACIÓN; en las fichas, los detalles de la revisión.

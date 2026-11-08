@@ -118,6 +118,8 @@
 
     a { color: var(--primary); }
 
+    img.foto { width: 100%; max-width: 560px; height: auto; border: 1px solid var(--border); border-radius: 12px; display: block; margin: 12px 0; background: #fff; }
+
     img.diagram { width: 100%; height: auto; border: 1px solid var(--border); border-radius: 12px; display: block; margin: 12px 0; background: #fff; }
 
     img.evidence { max-width: 360px; width: 100%; border-radius: 12px; border: 1px solid var(--border); display: block; margin: 12px 0; }
@@ -158,8 +160,8 @@
         <strong>caso real</strong> de ZKP: qué prueba, qué esconde, quién verifica y qué confianza queda.
       </p>
       <p class="note">
-        <strong>Estado:</strong> el lab se hace <strong>en clase, con papel y una moneda</strong>, y lo que se entrega es una <strong>foto de las tablas llenas a mano</strong>. Está lista la preparación
-        (plantilla y hoja de referencia); la cueva, la ficha del caso asignado y las fotos aparecen como pendientes porque ocurren en clase.
+        <strong>Estado:</strong> la tabla de rondas se llenó a mano con los datos de una <strong>simulación por computadora</strong> (no con moneda y papel), las <strong>fichas de los 4 casos</strong> están llenas a mano
+        y la reflexión está redactada. Las <strong>fotos</strong> de la tabla y de las fichas están más abajo, en la sección Entrega.
       </p>
     </section>
 
@@ -169,10 +171,10 @@
         <div class="mini-card"><strong>Plantilla de la tabla de rondas y la ficha</strong><span class="badge ok">Lista</span></div>
         <div class="mini-card"><strong>Tabla de ½ⁿ de referencia</strong><span class="badge ok">Lista</span></div>
         <div class="mini-card"><strong>Diagramas (cueva, ronda, ½ⁿ, confianza)</strong><span class="badge ok">Listos</span></div>
-        <div class="mini-card"><strong>Cueva con 10 rondas</strong><span class="badge pending">En clase</span></div>
-        <div class="mini-card"><strong>Ficha del caso asignado (7 filas)</strong><span class="badge pending">En clase</span></div>
-        <div class="mini-card"><strong>Foto de las tablas a mano</strong><span class="badge pending">En clase</span></div>
-        <div class="mini-card"><strong>Reflexión de 3 líneas</strong><span class="badge pending">En clase</span></div>
+        <div class="mini-card"><strong>Tabla de rondas (datos simulados, a mano)</strong><span class="badge ok">Llenada</span></div>
+        <div class="mini-card"><strong>Fichas de los 4 casos (7 filas cada una)</strong><span class="badge ok">Llenadas a mano</span></div>
+        <div class="mini-card"><strong>Fotos de la tabla y las fichas</strong><span class="badge ok">Agregadas</span></div>
+        <div class="mini-card"><strong>Reflexión de 3 líneas</strong><span class="badge ok">Redactada</span></div>
       </div>
     </section>
 
@@ -205,6 +207,84 @@
         </table>
       </div>
       <p>El verificador no oye la palabra: se convence por la probabilidad, no por el dato. Tabla completa en <a href="REFERENCIA.md">REFERENCIA.md</a>.</p>
+    </section>
+
+    <section class="card">
+      <h2>Tabla de rondas (simulada por computadora)</h2>
+      <p class="note">
+        <strong>Dicho tal cual es:</strong> esta tabla es una <strong>simulación por computadora</strong> con números aleatorios (<code>simulacion/cueva.py</code>), no la cueva con moneda y papel en clase.
+        Sirve para ver cómo sale la actividad y comprobar que ½ⁿ funciona.
+      </p>
+      <img class="diagram" src="diagramas/tabla-rondas-simulada.svg" alt="Tabla de rondas simulada: probadores A a H, con ✓ y ✗ por ronda, ronda en que cayeron y ½ⁿ" />
+      <div class="table-wrap">
+        <table>
+          <tr><th>Probador</th><th>¿SÍ o NO sabe?</th><th>R1</th><th>R2</th><th>R3</th><th>R4</th><th>R5</th><th>R6</th><th>R7</th><th>R8</th><th>R9</th><th>R10</th><th>Cayó en la ronda</th><th>Rondas pasadas</th><th>½ⁿ</th></tr>
+          <tr><td style="text-align:center">A</td><td style="text-align:center">SÍ</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="text-align:center">—</td><td style="text-align:center">10</td><td style="text-align:center">1/1024</td></tr>
+          <tr><td style="text-align:center">B</td><td style="text-align:center">NO</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#fee2e2;text-align:center">✗</td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center">1/2</td></tr>
+          <tr><td style="text-align:center">C</td><td style="text-align:center">NO</td><td style="background:#fee2e2;text-align:center">✗</td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">1</td></tr>
+          <tr><td style="text-align:center">D</td><td style="text-align:center">SÍ</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="text-align:center">—</td><td style="text-align:center">10</td><td style="text-align:center">1/1024</td></tr>
+          <tr><td style="text-align:center">E</td><td style="text-align:center">NO</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#fee2e2;text-align:center">✗</td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center">4</td><td style="text-align:center">3</td><td style="text-align:center">1/8</td></tr>
+          <tr><td style="text-align:center">F</td><td style="text-align:center">NO</td><td style="background:#fee2e2;text-align:center">✗</td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">1</td></tr>
+          <tr><td style="text-align:center">G</td><td style="text-align:center">NO</td><td style="background:#dcfce7;text-align:center">✓</td><td style="background:#fee2e2;text-align:center">✗</td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center">1/2</td></tr>
+          <tr><td style="text-align:center">H</td><td style="text-align:center">NO</td><td style="background:#fee2e2;text-align:center">✗</td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">1</td></tr>
+          </table>
+      </div>
+      <p><strong>Lectura:</strong> los probadores que sí saben la palabra (A y D) pasaron las 10 rondas. Los que no la saben cayeron antes: dos en la ronda 2 (G y B), uno en la 4 (E) y tres en la 1 (C, F, H). Para un tramposo, la probabilidad de pasar <em>n</em> rondas es ½ⁿ.</p>
+      <p><strong>¿El verificador aprendió la palabra?</strong> No: solo vio que el probador salía por donde le pedía la moneda, nunca la oyó.<br />
+      <strong>¿Una foto de las anotaciones convencería a otro trío?</strong> No: otro trío no vio que la moneda se lanzara después de que el probador escribiera, así que las anotaciones podrían estar armadas de antemano.</p>
+      <h3>Comprobación con 100,000 tramposos simulados</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Ronda</th><th>% simulado</th><th>% teórico</th></tr>
+          <tr><td>1</td><td>50.08 %</td><td>50.00 %</td></tr>
+          <tr><td>2</td><td>24.95 %</td><td>25.00 %</td></tr>
+          <tr><td>3</td><td>12.51 %</td><td>12.50 %</td></tr>
+          <tr><td>4</td><td>6.22 %</td><td>6.25 %</td></tr>
+          <tr><td>5</td><td>3.09 %</td><td>3.12 %</td></tr>
+          <tr><td>Pasaron las 10</td><td>0.104 %</td><td>0.098 %</td></tr>
+        </table>
+      </div>
+      <p>Cayeron en las primeras 4 rondas: <strong>93.77 %</strong> (teórico: 93.75 %). Resultados completos en <a href="simulacion/resultados.md">simulacion/resultados.md</a>.</p>
+    </section>
+
+    <section class="card">
+      <h2>Reflexión (3 líneas)</h2>
+      <p>
+        <strong>(a) En la cueva, ¿qué convenció al verificador si nunca oyó la palabra?</strong><br />
+        La repetición: un tramposo solo acierta la mitad de las veces, así que pasar 10 rondas seguidas por suerte tiene probabilidad 1/1024. El verificador se convence por la probabilidad, no por el dato.
+      </p>
+      <p>
+        <strong>(b) En mi caso, ¿en qué punto la ZKP prueba algo falso si alguien miente o se equivoca?</strong> (un párrafo por cada uno de los 4 casos)
+      </p>
+      <ul>
+        <li><strong>UE (verificación de edad):</strong> si el emisor firmó una fecha de nacimiento falsa, la prueba "mayor de 18" sale perfecta y falsa; o si al circuito le falta una revisión (como el error de Longfellow en 2025), un tramposo mete un dato falso y la prueba igual pasa.</li>
+        <li><strong>Zcash:</strong> si el circuito o el sistema de pruebas tienen un fallo (como el de BCTV14 en 2019), se podrían aceptar pruebas falsas y crear monedas de la nada sin que se note; y lo mismo si todos los de la ceremonia guardaran su secreto.</li>
+        <li><strong>World ID:</strong> la prueba solo garantiza que estoy en el registro; si el registro biométrico acepta a quien no debería o duplica a una persona, la prueba de "persona única" sería sobre algo falso.</li>
+        <li><strong>zk-rollups:</strong> si el circuito está mal escrito o, en las variantes SNARK, alguien guardó el secreto de la configuración confiable, se podrían probar transacciones falsas.</li>
+      </ul>
+      <p>
+        <strong>(c) ¿Qué regla de mi venture comprobaría así en vez de guardar el dato?</strong><br />
+        Una regla como "mayor de 18" o "reside en Guatemala", que hoy se comprueba guardando la fecha de nacimiento o la foto del DPI, y que se podría comprobar con una prueba basada en un dato firmado por un emisor, sin guardar el dato. Si esa regla es un deber legal de KYC, lo dejo como pregunta para asesoría legal.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Entrega: fotos hechas a mano</h2>
+      <h3>Tabla de rondas (Parte A)</h3>
+      <img class="foto" src="evidence/tabla-rondas.jpg" alt="Tabla de rondas escrita a mano con probadores A a H, marcas por ronda, ronda en que cayeron y probabilidad" />
+      <p class="note">Tabla llenada a mano con los datos de la <strong>simulación por computadora</strong> (ver arriba), no con una cueva de moneda y papel en clase. Probadores con letras, sin nombres.</p>
+      <h3>Ficha del caso 1: verificación de edad de la UE</h3>
+      <img class="foto" src="evidence/ficha-caso1-ue.jpg" alt="Ficha a mano del caso 1: verificación de edad de la UE, con sus 7 filas" />
+      <p><strong>Reflexión (b) de este caso:</strong> Si el emisor firmó una fecha de nacimiento falsa, la prueba "mayor de 18" sale perfecta y falsa; o si al circuito le falta una revisión (como el error de Longfellow en 2025, corregido en la v0.8.4), un tramposo mete un dato falso y la prueba igual pasa.</p>
+      <h3>Ficha del caso 2: Zcash (pagos blindados)</h3>
+      <img class="foto" src="evidence/ficha-caso2-zcash.jpg" alt="Ficha a mano del caso 2: Zcash, pagos blindados, con sus 7 filas" />
+      <p><strong>Reflexión (b) de este caso:</strong> Si el circuito o el sistema de pruebas tienen un fallo (como el de BCTV14 en 2019), se podrían aceptar pruebas falsas y crear monedas de la nada sin que se note; y lo mismo si todos los de la ceremonia guardaran su secreto.</p>
+      <h3>Ficha del caso 3: World ID</h3>
+      <img class="foto" src="evidence/ficha-caso3-worldid.jpg" alt="Ficha a mano del caso 3: World ID, con sus 7 filas" />
+      <p><strong>Reflexión (b) de este caso:</strong> La prueba solo garantiza que estoy en el registro; si el registro biométrico (el Orb) acepta a quien no debería o duplica a una persona, la prueba de "persona única" sería sobre algo falso.</p>
+      <h3>Ficha del caso 4: zk-rollups</h3>
+      <img class="foto" src="evidence/ficha-caso4-zkrollups.jpg" alt="Ficha a mano del caso 4: zk-rollups, con sus 7 filas" />
+      <p><strong>Reflexión (b) de este caso:</strong> Si el circuito está mal escrito o, en las variantes SNARK, alguien guardó el secreto de la configuración confiable, se podrían probar transacciones falsas.</p>
     </section>
 
     <section class="card">
